@@ -19,7 +19,7 @@ type HTTPServer struct {
 
 // NewHTTPServer method
 // Create New Server
-func (h *HTTPServer) NewHTTPServer() *HTTPServer {
+func NewHTTPServer() *HTTPServer {
 	server := echo.New()
 	return &HTTPServer{
 		server: server,
@@ -56,4 +56,3 @@ func (h *HTTPServer) RunServerWithGraceFull(address string) {
 func (h *HTTPServer) Shutdown() {
 	h.server.Shutdown(h.ctx)
 }
-
