@@ -2,8 +2,10 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -21,8 +23,30 @@ type HTTPServer struct {
 // Create New Server
 func NewHTTPServer() *HTTPServer {
 	server := echo.New()
+	server.HideBanner = true
 	return &HTTPServer{
 		server: server,
+		ctx:    context.Background(),
+	}
+}
+
+// RegisterHttp function
+// Invoke Routes from http class
+func RegisterHttp(services ...HttpRoute) {
+	for _, service := range services {
+		service.Routes()
+	}
+}
+
+// RegisterRoute method
+func (h *HTTPServer) RegisterRoute(routes *Routes) {
+	s := strings.Repeat("=", 10)
+	fmt.Printf("%s Register Routes %s \n", s, s)
+	for _, route := range routes.Routes {
+		go func(route Route) {
+			r := h.server.Add(route.Method, route.Path, route.Handler, route.Middleware...)
+			fmt.Printf("[path:%s] %s [method:%s]\n", r.Path, strings.Repeat("-", 20), r.Method)
+		}(route)
 	}
 }
 
