@@ -43,10 +43,8 @@ func (h *HTTPServer) RegisterRoute(routes *Routes) {
 	s := strings.Repeat("=", 10)
 	fmt.Printf("%s Register Routes %s \n", s, s)
 	for _, route := range routes.Routes {
-		go func(route Route) {
-			r := h.server.Add(route.Method, route.Path, route.Handler, route.Middleware...)
-			fmt.Printf("[path:%s] %s [method:%s]\n", r.Path, strings.Repeat("-", 20), r.Method)
-		}(route)
+		r := h.server.Add(route.Method, route.Path, route.Handler, route.Middleware...)
+		fmt.Printf("[path:%s] %s [method:%s]\n", r.Path, strings.Repeat("-", 20), r.Method)
 	}
 }
 

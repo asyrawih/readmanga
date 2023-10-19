@@ -21,7 +21,8 @@ func rooteHandler(c echo.Context) error {
 }
 
 func testHandler(c echo.Context) error {
-	return c.JSON(200, "rooteHandler")
+	s := c.Param("id")
+	return c.JSON(200, s)
 }
 
 func (m *MangaHttpController) Routes() {
@@ -39,7 +40,7 @@ func (m *MangaHttpController) Routes() {
 		},
 		{
 			Method:  http.MethodGet,
-			Path:    "/test/oke",
+			Path:    "/test/:id",
 			Handler: testHandler,
 		},
 	}
