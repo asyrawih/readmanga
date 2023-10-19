@@ -1,7 +1,16 @@
 package mysql
 
-import "net"
+import (
+	"github.com/jackc/pgx/v5"
+)
 
 type MangaRepository struct {
-	conn *net.Conn
+	conn *pgx.Conn
+}
+
+// NewMangaRepository function
+func NewMangaRepository(conn *pgx.Conn) *MangaRepository {
+	return &MangaRepository{
+		conn: conn,
+	}
 }
