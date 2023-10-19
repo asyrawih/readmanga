@@ -11,7 +11,6 @@ func Connect(ctx context.Context, dsn string) (*pgx.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer c.Close(ctx)
 
 	// Check This DB must be Connect to database server
 	if err = c.Ping(ctx); err != nil {
