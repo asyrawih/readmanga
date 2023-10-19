@@ -1,16 +1,18 @@
-package http
+package manga
 
 import (
-	"net/http"
+	net "net/http"
+
+	"bacakomik/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 type MangaHttpController struct {
-	server *HTTPServer
+	server *http.HTTPServer
 }
 
-func NewMangaHttpServer(server *HTTPServer) *MangaHttpController {
+func NewMangaHttpServer(server *http.HTTPServer) *MangaHttpController {
 	return &MangaHttpController{
 		server: server,
 	}
@@ -26,20 +28,20 @@ func testHandler(c echo.Context) error {
 }
 
 func (m *MangaHttpController) Routes() {
-	r := NewRoutes()
-	routes := []Route{
+	r := http.NewRoutes()
+	routes := []http.Route{
 		{
-			Method:  http.MethodGet,
+			Method:  net.MethodGet,
 			Path:    "/",
 			Handler: rooteHandler,
 		},
 		{
-			Method:  http.MethodGet,
+			Method:  net.MethodGet,
 			Path:    "/test",
 			Handler: testHandler,
 		},
 		{
-			Method:  http.MethodGet,
+			Method:  net.MethodGet,
 			Path:    "/test/:id",
 			Handler: testHandler,
 		},
