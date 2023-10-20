@@ -52,7 +52,7 @@ func NewRetrival[T interface{}, K interface{}](t interface {
 	Cleanup(func())
 }) *Retrival[T, K] {
 	mock := &Retrival[T, K]{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 

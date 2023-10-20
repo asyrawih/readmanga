@@ -95,7 +95,7 @@ func NewRepoMangaCreational(t interface {
 	Cleanup(func())
 }) *RepoMangaCreational {
 	mock := &RepoMangaCreational{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 

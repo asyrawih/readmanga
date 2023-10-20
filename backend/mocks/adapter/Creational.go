@@ -34,7 +34,7 @@ func NewCreational[T interface{}](t interface {
 	Cleanup(func())
 }) *Creational[T] {
 	mock := &Creational[T]{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 

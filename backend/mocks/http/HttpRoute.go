@@ -21,7 +21,7 @@ func NewHttpRoute(t interface {
 	Cleanup(func())
 }) *HttpRoute {
 	mock := &HttpRoute{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 

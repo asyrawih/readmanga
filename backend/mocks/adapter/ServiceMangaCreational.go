@@ -28,6 +28,20 @@ func (_m *ServiceMangaCreational) Create(ctx context.Context, data *entity.Manga
 	return r0
 }
 
+// Delete provides a mock function with given fields: ctx, id
+func (_m *ServiceMangaCreational) Delete(ctx context.Context, id int) bool {
+	ret := _m.Called(ctx, id)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(context.Context, int) bool); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
+}
+
 // GetAll provides a mock function with given fields: ctx
 func (_m *ServiceMangaCreational) GetAll(ctx context.Context) []*entity.Manga {
 	ret := _m.Called(ctx)
@@ -81,7 +95,7 @@ func NewServiceMangaCreational(t interface {
 	Cleanup(func())
 }) *ServiceMangaCreational {
 	mock := &ServiceMangaCreational{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 

@@ -34,7 +34,7 @@ func NewModificational[T interface{}, K interface{}](t interface {
 	Cleanup(func())
 }) *Modificational[T, K] {
 	mock := &Modificational[T, K]{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 

@@ -34,7 +34,7 @@ func NewDestroyer[ID interface{}](t interface {
 	Cleanup(func())
 }) *Destroyer[ID] {
 	mock := &Destroyer[ID]{}
-	mock.Test(t)
+	mock.Mock.Test(t)
 
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 
