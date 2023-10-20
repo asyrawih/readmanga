@@ -11,6 +11,7 @@ type ServiceMangaCreational interface {
 	Creational[entity.Manga]
 	Modificational[entity.Manga, int]
 	Retrival[entity.Manga, int]
+	Destroyer[int]
 }
 
 // Contract Repo

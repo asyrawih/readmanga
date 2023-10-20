@@ -47,10 +47,6 @@ func (m *MangaRepository) Create(ctx context.Context, manga *entity.Manga) error
 	return nil
 }
 
-// FindById method
-func (m *MangaRepository) FindById(ctx context.Context, id int) {
-}
-
 // Update Data
 func (ma *MangaRepository) Update(ctx context.Context, data *entity.Manga, id int) error {
 	panic("not implemented") // TODO: Implement
