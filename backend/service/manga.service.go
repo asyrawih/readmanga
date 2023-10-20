@@ -3,16 +3,16 @@ package service
 import (
 	"context"
 
+	"bacakomik/adapter"
 	"bacakomik/record/entity"
-	"bacakomik/repository/mysql"
 )
 
 type MangaService struct {
-	repo *mysql.MangaRepository
+	repo adapter.RepoMangaCreational
 }
 
 // NewMangaService function
-func NewMangaService(repo *mysql.MangaRepository) *MangaService {
+func NewMangaService(repo adapter.RepoMangaCreational) *MangaService {
 	return &MangaService{
 		repo: repo,
 	}
@@ -28,15 +28,20 @@ func (ma *MangaService) Create(ctx context.Context, manga *entity.Manga) error {
 
 // Get All Data
 func (ma *MangaService) GetAll(ctx context.Context) []*entity.Manga {
-	panic("not implemented") // TODO: Implement
+	m := ma.repo.GetAll(ctx)
+	return m
 }
 
 // Retrive One Data
 func (ma *MangaService) GetOne(ctx context.Context, id int) *entity.Manga {
-	panic("not implemented") // TODO: Implement
+	m := ma.repo.GetOne(ctx, id)
+	return m
 }
 
 // Update Data
 func (ma *MangaService) Update(ctx context.Context, manga *entity.Manga, id int) error {
-	panic("not implemented") // TODO: Implement
+	if err := ma.repo.Update(ctx, manga, id); err != nil {
+		return err
+	}
+	return nil
 }
