@@ -22,7 +22,7 @@ func NewUserRepository(conn *pgx.Conn) *UserRepository {
 
 // Create Data
 func (us *UserRepository) Create(ctx context.Context, data *entity.User) error {
-	panic("not implemented") // TODO: Implement
+	return nil
 }
 
 // Get All Data
@@ -42,4 +42,9 @@ func (us *UserRepository) Delete(ctx context.Context, id int) bool {
 // Update Data
 func (us *UserRepository) Update(ctx context.Context, data *entity.User, id int) error {
 	panic("not implemented") // TODO: Implement
+}
+
+// Get Access to instance of of T
+func (us *UserRepository) NewApi() *UserRepository {
+	return us
 }

@@ -48,6 +48,13 @@ func (m *MangaRepository) Create(ctx context.Context, manga *entity.Manga) error
 	return nil
 }
 
+// NewApi method
+// In case some api need access but not exist 
+// concrate implementation just returning it
+func (m *MangaRepository) NewApi() *MangaRepository {
+	return m
+}
+
 // Update Data
 func (ma *MangaRepository) Update(ctx context.Context, data *entity.Manga, id int) error {
 	query := `UPDATE manga SET title = $1, status = $2, release_date = $3, total_chapter = $4, author = $5, type = $6, sinopsis = $7, created_by = $8 WHERE id = $10;`
@@ -104,3 +111,7 @@ func (m *MangaRepository) Delete(ctx context.Context, id int) bool {
 	}
 	return ct.Delete()
 }
+
+func (m *MangaRepository) TestNotInAdapter() {
+}
+

@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"bacakomik/record/entity"
+	"bacakomik/repository/mysql"
 )
 
-// Contract
+// Contract of Service manga  as depedency
 type ServiceMangaCreational interface {
 	Creational[entity.Manga]
 	Modificational[entity.Manga, int]
@@ -20,15 +21,32 @@ type RepoMangaCreational interface {
 	Modificational[entity.Manga, int]
 	Retrival[entity.Manga, int]
 	Destroyer[int]
+	Accessable[mysql.MangaRepository]
 }
 
 
 // Contract Repo
 type RepoUserCreational interface {
-	Creational[entity.Manga]
-	Modificational[entity.Manga, int]
-	Retrival[entity.Manga, int]
+	Creational[entity.User]
+	Modificational[entity.User, int]
+	Retrival[entity.User, int]
 	Destroyer[int]
+	Accessable[mysql.UserRepository]
+}
+
+
+// Contract Repo
+type ServiceUserCreational interface {
+	Creational[entity.User]
+	Modificational[entity.User, int]
+	Retrival[entity.User, int]
+	Destroyer[int]
+}
+
+
+type Accessable[T any] interface {
+	// Get Access to instance of of T
+	NewApi() *T
 }
 
 type Creational[T any] interface {
@@ -49,5 +67,6 @@ type Retrival[T any, K any] interface {
 }
 
 type Destroyer[ID any] interface {
+	// Delete the record
 	Delete(ctx context.Context, id ID) bool
 }
