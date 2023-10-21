@@ -9,7 +9,9 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog/log"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type HTTPServer struct {
@@ -24,6 +26,16 @@ type HTTPServer struct {
 func NewHTTPServer() *HTTPServer {
 	server := echo.New()
 	server.HideBanner = true
+
+	server.GET("/swagger/*", echoSwagger.WrapHandler)
+	server.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Skipper: func(c echo.Context) bool {
+			return strings.Contains(c.Request().URL.Path, "swagger")
+		},
+		Level:     0,
+		MinLength: 0,
+	}))
+
 	return &HTTPServer{
 		server: server,
 		ctx:    context.Background(),

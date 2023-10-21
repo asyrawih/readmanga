@@ -1,0 +1,96 @@
+basePath: /
+definitions:
+  entity.Manga:
+    properties:
+      author:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      id:
+        type: integer
+      release_date:
+        type: string
+      sinopsis:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      total_chapter:
+        type: integer
+      type:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: hanan@asyrawih.id
+    name: API manga
+  description: Manga service api
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Hanan Test
+  version: 1.0.0
+paths:
+  /manga:
+    get:
+      consumes:
+      - application/json
+      description: get all manga
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Manga'
+            type: array
+      summary: List manga
+      tags:
+      - manga
+  /manga/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Manga based on id
+      parameters:
+      - description: Manga Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Remove manga
+      tags:
+      - manga
+    get:
+      consumes:
+      - application/json
+      description: get all manga
+      parameters:
+      - description: Manga Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Manga'
+      summary: List manga
+      tags:
+      - manga
+swagger: "2.0"

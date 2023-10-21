@@ -43,12 +43,33 @@ func (m *MangaHttpController) createManga(c echo.Context) error {
 	return c.JSON(200, "oke")
 }
 
+// Listmanga list all existing manga
+//
+//	@Summary		List manga
+//	@Description	get all manga
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{array}	entity.Manga
+//	@Router			/manga [get]
+//
 // GetAllManga method
 func (m *MangaHttpController) GetAllManga(c echo.Context) error {
 	mangas := m.service.GetAll(c.Request().Context())
 	return c.JSON(200, mangas)
 }
 
+//	Get Manga
+//
+//	@Summary		List manga
+//	@Description	get all manga
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Manga Id"	
+//	@Success		200	{object}	entity.Manga
+//	@Router			/manga/{id} [get]
+// GetAllManga method
 func (m *MangaHttpController) DetailManga(c echo.Context) error {
 	stringID := c.Param("id")
 	mangaID, err := strconv.Atoi(stringID)
@@ -62,14 +83,29 @@ func (m *MangaHttpController) DetailManga(c echo.Context) error {
 	return c.JSON(200, manga)
 }
 
+//  Delete Manga	
+//
+//	@Summary		Remove manga
+//	@Description	Delete Manga based on id 
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int		true	"Manga Id"	
+//	@Success		200	{string}	SUCCESS	
+//	@Fail			400 {string}    FAIL	
+//	@Router			/manga/{id} [delete]
+// GetAllManga method
 func (m *MangaHttpController) Delete(c echo.Context) error {
 	stringID := c.Param("id")
 	mangaID, err := strconv.Atoi(stringID)
 	if err != nil {
 		return err
 	}
-	m.service.Delete(c.Request().Context(), mangaID)
-	return nil
+	b := m.service.Delete(c.Request().Context(), mangaID)
+	if !b {
+		return c.JSON(400, "FAIL") 
+	}
+    return c.JSON(200, "SUCCESS") 
 }
 
 func (m *MangaHttpController) Routes() {
