@@ -1,0 +1,23 @@
+mode: set
+bacakomik/http/route.go:24.26,28.2 1 1
+bacakomik/http/route.go:31.35,33.2 1 1
+bacakomik/http/server.go:24.34,31.2 3 0
+bacakomik/http/server.go:35.42,36.35 1 0
+bacakomik/http/server.go:36.35,38.3 1 0
+bacakomik/http/server.go:42.52,45.38 3 0
+bacakomik/http/server.go:45.38,48.3 2 0
+bacakomik/http/server.go:52.52,53.48 1 0
+bacakomik/http/server.go:53.48,55.3 1 0
+bacakomik/http/server.go:59.61,71.47 7 0
+bacakomik/http/server.go:71.47,73.3 1 0
+bacakomik/http/server.go:78.33,80.2 1 0
+bacakomik/service/manga.service.go:15.70,19.2 1 1
+bacakomik/service/manga.service.go:22.80,23.51 1 1
+bacakomik/service/manga.service.go:23.51,25.3 1 1
+bacakomik/service/manga.service.go:26.2,26.12 1 1
+bacakomik/service/manga.service.go:30.69,33.2 2 1
+bacakomik/service/manga.service.go:36.75,39.2 2 1
+bacakomik/service/manga.service.go:42.88,43.55 1 1
+bacakomik/service/manga.service.go:43.55,45.3 1 1
+bacakomik/service/manga.service.go:46.2,46.12 1 1
+bacakomik/service/manga.service.go:50.66,52.2 1 1

@@ -48,5 +48,5 @@ func (ma *MangaService) Update(ctx context.Context, manga *entity.Manga, id int)
 
 // Delete method
 func (ma *MangaService) Delete(ctx context.Context, id int) bool {
-	panic("not implemented") // TODO: Implement
+	return ma.repo.Delete(ctx, id)
 }

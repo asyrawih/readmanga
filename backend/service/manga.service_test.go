@@ -187,3 +187,79 @@ func TestMangaService_GetOne(t *testing.T) {
 	}
 
 }
+
+func TestMangaService_Update(t *testing.T) {
+	tests := []struct {
+		name      string
+		args      int
+		setup     func(rmc *mocks.RepoMangaCreational) (*MangaService, *entity.Manga, context.Context)
+		wantError bool
+	}{
+		{
+			name: "Should not returning error",
+			args: 1,
+			setup: func(rmc *mocks.RepoMangaCreational) (*MangaService, *entity.Manga, context.Context) {
+				ms, m, ctx := setupCreateTest(t, rmc)
+				rmc.On("Update", ctx, m, mock.Anything).Return(nil)
+				return ms, m, ctx
+			},
+
+			wantError: false,
+		},
+		{
+			name: "should not returning error",
+			args: 1,
+			setup: func(rmc *mocks.RepoMangaCreational) (*MangaService, *entity.Manga, context.Context) {
+				ms, m, ctx := setupCreateTest(t, rmc)
+				rmc.On("Update", ctx, m, mock.Anything).Return(errors.New("error fail update data"))
+				return ms, m, ctx
+			},
+
+			wantError: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(t.Name(), func(t *testing.T) {
+			rmc := mocks.NewRepoMangaCreational(t)
+			ms, m, ctx := tt.setup(rmc)
+			err := ms.Update(ctx, m, tt.args)
+			if (err != nil) != tt.wantError {
+				t.Fatal(err)
+			}
+		})
+	}
+}
+
+func TestMangaService_Delete(t *testing.T) {
+
+	tests := []struct {
+		name      string
+		args      int
+		setup     func(rmc *mocks.RepoMangaCreational) (*MangaService, context.Context)
+		wantError bool
+	}{
+		{
+			name: "should return true",
+			args: 1,
+			setup: func(rmc *mocks.RepoMangaCreational) (*MangaService, context.Context) {
+				ms, _, ctx := setupCreateTest(t, rmc)
+				rmc.On("Delete", ctx, mock.Anything).Return(false)
+				return ms, ctx
+			},
+			wantError: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			rmc := mocks.NewRepoMangaCreational(t)
+			ms, ctx := tt.setup(rmc)
+			b := ms.Delete(ctx, tt.args)
+			if b != tt.wantError {
+				t.Errorf("Expeted %v : actual = %v", tt.wantError, b)
+			}
+		})
+	}
+
+}
