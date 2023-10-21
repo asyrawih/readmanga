@@ -8,8 +8,10 @@ import (
 	"bacakomik/adapter"
 	"bacakomik/http"
 	"bacakomik/record/entity"
+	"bacakomik/record/model"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog/log"
 )
 
 type MangaHttpController struct {
@@ -28,19 +30,48 @@ func rooteHandler(c echo.Context) error {
 	return c.JSON(200, "rooteHandler")
 }
 
+// Create Manga
+//
+//	@Summary		create manga
+//	@Description	create manga by accept body json
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Param			manga	body	model.CreateMangaRequest	true	"manga requested info"
+//	@Body			json
+//	@Success		200	{object}	model.Response{data=entity.Manga}
+//	@Router			/manga [post]
+//
+// GetAllManga method
 func (m *MangaHttpController) createManga(c echo.Context) error {
-	m.service.Create(c.Request().Context(), &entity.Manga{
-		Title:        "Test",
-		Status:       "ongoing",
-		ReleaseDate:  "2023",
-		TotalChapter: 200,
-		Author:       "Hanan",
-		Type:         "manga",
-		Sinopsis:     "test",
-		CreatedBy:    1,
-		CreatedAt:    time.Time{},
-	})
-	return c.JSON(200, "oke")
+	var mangaRequest model.CreateMangaRequest
+	if err := c.Bind(&mangaRequest); err != nil {
+		log.Err(err).Msg("BINDING MANGA INTO REQUEST")
+		response := model.NewResponse().SetErrorCode(400).SetMessage("Error Cannot Binding Data").SetData(nil)
+		return c.JSON(400, response)
+	}
+	// map into entity
+	manga := &entity.Manga{
+		Title:        mangaRequest.Title,
+		Status:       mangaRequest.Status,
+		ReleaseDate:  mangaRequest.ReleaseDate,
+		TotalChapter: mangaRequest.TotalChapter,
+		Author:       mangaRequest.Author,
+		Type:         mangaRequest.Type,
+		Sinopsis:     mangaRequest.Sinopsis,
+		CreatedBy:    2,
+		CreatedAt:    time.Now(),
+	}
+
+	// Create Manga
+	if err := m.service.Create(c.Request().Context(), manga); err != nil {
+		r2 := model.NewResponse().SetErrorCode(net.StatusBadRequest).SetMessage(err.Error()).SetData(nil)
+		return c.JSON(net.StatusBadRequest, r2)
+	}
+
+	// m.service.Create(c.Request().Context(), manga)
+	r := model.NewResponse().SetErrorCode(200).SetMessage("Success").SetData(mangaRequest)
+	return c.JSON(200, r)
 }
 
 // Listmanga list all existing manga
@@ -66,9 +97,10 @@ func (m *MangaHttpController) GetAllManga(c echo.Context) error {
 //	@Tags			manga
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path		int	true	"Manga Id"	
+//	@Param			id	path		int	true	"Manga Id"
 //	@Success		200	{object}	entity.Manga
 //	@Router			/manga/{id} [get]
+//
 // GetAllManga method
 func (m *MangaHttpController) DetailManga(c echo.Context) error {
 	stringID := c.Param("id")
@@ -83,17 +115,18 @@ func (m *MangaHttpController) DetailManga(c echo.Context) error {
 	return c.JSON(200, manga)
 }
 
-//  Delete Manga	
+//	 Delete Manga
 //
 //	@Summary		Remove manga
-//	@Description	Delete Manga based on id 
+//	@Description	Delete Manga based on id
 //	@Tags			manga
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path		int		true	"Manga Id"	
-//	@Success		200	{string}	SUCCESS	
-//	@Fail			400 {string}    FAIL	
+//	@Param			id	path		int	true	"Manga Id"
+//	@Success		200	{string}	SUCCESS
+//	@Fail			400 {string}    FAIL
 //	@Router			/manga/{id} [delete]
+//
 // GetAllManga method
 func (m *MangaHttpController) Delete(c echo.Context) error {
 	stringID := c.Param("id")
@@ -103,9 +136,9 @@ func (m *MangaHttpController) Delete(c echo.Context) error {
 	}
 	b := m.service.Delete(c.Request().Context(), mangaID)
 	if !b {
-		return c.JSON(400, "FAIL") 
+		return c.JSON(400, "FAIL")
 	}
-    return c.JSON(200, "SUCCESS") 
+	return c.JSON(200, "SUCCESS")
 }
 
 func (m *MangaHttpController) Routes() {

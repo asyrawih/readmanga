@@ -23,6 +23,31 @@ definitions:
       type:
         type: string
     type: object
+  model.CreateMangaRequest:
+    properties:
+      author:
+        type: string
+      release_date:
+        type: string
+      sinopsis:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      total_chapter:
+        type: integer
+      type:
+        type: string
+    type: object
+  model.Response:
+    properties:
+      data: {}
+      error_code:
+        type: integer
+      message:
+        type: string
+    type: object
 host: localhost:3000
 info:
   contact:
@@ -50,6 +75,32 @@ paths:
               $ref: '#/definitions/entity.Manga'
             type: array
       summary: List manga
+      tags:
+      - manga
+    post:
+      consumes:
+      - application/json
+      description: create manga by accept body json
+      parameters:
+      - description: manga requested info
+        in: body
+        name: manga
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateMangaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Manga'
+              type: object
+      summary: create manga
       tags:
       - manga
   /manga/{id}:
