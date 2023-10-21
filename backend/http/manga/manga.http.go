@@ -2,6 +2,7 @@ package manga
 
 import (
 	net "net/http"
+	"strconv"
 	"time"
 
 	"bacakomik/adapter"
@@ -42,6 +43,35 @@ func (m *MangaHttpController) createManga(c echo.Context) error {
 	return c.JSON(200, "oke")
 }
 
+// GetAllManga method
+func (m *MangaHttpController) GetAllManga(c echo.Context) error {
+	mangas := m.service.GetAll(c.Request().Context())
+	return c.JSON(200, mangas)
+}
+
+func (m *MangaHttpController) DetailManga(c echo.Context) error {
+	stringID := c.Param("id")
+	mangaID, err := strconv.Atoi(stringID)
+	if err != nil {
+		return err
+	}
+	manga := m.service.GetOne(c.Request().Context(), mangaID)
+	if manga == nil {
+		return c.JSON(404, "NOT FOUND")
+	}
+	return c.JSON(200, manga)
+}
+
+func (m *MangaHttpController) Delete(c echo.Context) error {
+	stringID := c.Param("id")
+	mangaID, err := strconv.Atoi(stringID)
+	if err != nil {
+		return err
+	}
+	m.service.Delete(c.Request().Context(), mangaID)
+	return nil
+}
+
 func (m *MangaHttpController) Routes() {
 	r := http.NewRoutes()
 	routes := []http.Route{
@@ -54,6 +84,21 @@ func (m *MangaHttpController) Routes() {
 			Method:  net.MethodPost,
 			Path:    "/manga",
 			Handler: m.createManga,
+		},
+		{
+			Method:  net.MethodGet,
+			Path:    "/manga",
+			Handler: m.GetAllManga,
+		},
+		{
+			Method:  net.MethodGet,
+			Path:    "/manga/:id",
+			Handler: m.DetailManga,
+		},
+		{
+			Method:  net.MethodDelete,
+			Path:    "/manga/:id",
+			Handler: m.Delete,
 		},
 	}
 	r.Routes = append(r.Routes, routes...)

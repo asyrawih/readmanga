@@ -21,4 +21,5 @@ bacakomik/service/manga.service.go:42.88,43.55 1 1
 bacakomik/service/manga.service.go:43.55,45.3 1 1
 bacakomik/service/manga.service.go:46.2,46.12 1 1
 bacakomik/service/manga.service.go:50.66,52.2 1 1
-bacakomik/service/user.service.go:10.67,14.2 1 1
+bacakomik/service/user.service.go:15.67,19.2 1 0
+bacakomik/service/user.service.go:22.77,25.2 2 1

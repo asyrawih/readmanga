@@ -49,7 +49,7 @@ func (m *MangaRepository) Create(ctx context.Context, manga *entity.Manga) error
 }
 
 // NewApi method
-// In case some api need access but not exist 
+// In case some api need access but not exist
 // concrate implementation just returning it
 func (m *MangaRepository) NewApi() *MangaRepository {
 	return m
@@ -96,22 +96,19 @@ func (m *MangaRepository) GetOne(ctx context.Context, id int) *entity.Manga {
 	var manga entity.Manga
 	sqlString := `SELECT * FROM mangas where id = $1`
 	if err := pgxscan.Get(ctx, m.conn, &manga, sqlString, id); err != nil {
-		log.Err(err).Msg("[mysql](FindById)")
+		log.Err(err).Msg("[mysql][GetOne]")
+		return nil
 	}
-	return nil
+	return &manga
 }
 
 // Delete method
 func (m *MangaRepository) Delete(ctx context.Context, id int) bool {
-	sqlString := `delete from mangas where id = $2`
+	sqlString := `delete from mangas where id = $1`
 	ct, err := m.conn.Exec(ctx, sqlString, id)
 	if err != nil {
-		log.Err(err).Msg("[mysql](FindById)")
+		log.Err(err).Msg("[mysql]:(Delete)")
 
 	}
 	return ct.Delete()
 }
-
-func (m *MangaRepository) TestNotInAdapter() {
-}
-
