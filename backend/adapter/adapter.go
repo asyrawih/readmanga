@@ -22,6 +22,15 @@ type RepoMangaCreational interface {
 	Destroyer[int]
 }
 
+
+// Contract Repo
+type RepoUserCreational interface {
+	Creational[entity.Manga]
+	Modificational[entity.Manga, int]
+	Retrival[entity.Manga, int]
+	Destroyer[int]
+}
+
 type Creational[T any] interface {
 	// Create Data
 	Create(ctx context.Context, data *T) error
