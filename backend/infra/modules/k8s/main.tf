@@ -23,7 +23,7 @@ resource "kubernetes_deployment" "nginx" {
       spec {
         container {
           image             = "nginx:latest"
-          name              = "nginxserer"
+          name              = "nginx-server"
           image_pull_policy = "IfNotPresent"
           port {
             container_port = 80
