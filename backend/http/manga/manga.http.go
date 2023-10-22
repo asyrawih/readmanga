@@ -14,6 +14,10 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type SuccessMessage string
+
+type FailMessage string 
+
 type MangaHttpController struct {
 	service adapter.ServiceMangaCreational
 	server  *http.HTTPServer
@@ -81,13 +85,17 @@ func (m *MangaHttpController) createManga(c echo.Context) error {
 //	@Tags			manga
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}	entity.Manga
+//	@Success		200	{object}	model.Response{data=[]entity.Manga}
 //	@Router			/manga [get]
 //
 // GetAllManga method
 func (m *MangaHttpController) GetAllManga(c echo.Context) error {
 	mangas := m.service.GetAll(c.Request().Context())
-	return c.JSON(200, mangas)
+	response := model.NewResponse().
+		SetData(mangas).
+		SetMessage("SUCCESS").
+		SetErrorCode(net.StatusOK)
+	return c.JSON(200, response)
 }
 
 //	Get Manga
@@ -98,21 +106,57 @@ func (m *MangaHttpController) GetAllManga(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		int	true	"Manga Id"
-//	@Success		200	{object}	entity.Manga
+//	@Success		200	{object}	model.Response{data=entity.Manga}
 //	@Router			/manga/{id} [get]
 //
 // GetAllManga method
 func (m *MangaHttpController) DetailManga(c echo.Context) error {
 	stringID := c.Param("id")
+	response := model.NewResponse()
 	mangaID, err := strconv.Atoi(stringID)
 	if err != nil {
 		return err
 	}
 	manga := m.service.GetOne(c.Request().Context(), mangaID)
 	if manga == nil {
-		return c.JSON(404, "NOT FOUND")
+		r := response.SetMessage("not found").
+			SetErrorCode(net.StatusNotFound).
+			SetData("NOT FOUND")
+		return c.JSON(net.StatusNotFound, r)
 	}
-	return c.JSON(200, manga)
+
+	successResponse := response.
+		SetMessage("SUCCESS").
+		SetErrorCode(net.StatusOK).
+		SetData(manga)
+	return c.JSON(net.StatusOK, successResponse)
+}
+
+//	 UpdateManga
+//
+//	@Summary		Update Manga
+//	@Description	update manga by pass id
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int							true	"Manga Id"
+//	@Param			manga	body		model.CreateMangaRequest	true	"manga requested info"
+//	@Success		200		{object}	model.Response{data=SuccessMessage}
+//	@Fail			400     {object}    model.Response{data=FailMessage}
+//	@Router			/manga/{id} [put]
+//
+// GetAllManga method
+func (m *MangaHttpController) UpdateManga(c echo.Context) error {
+	response := model.NewResponse()
+	var updateMangaRequest *model.UpdateMangaRequest
+	if err := c.Bind(&updateMangaRequest); err != nil {
+		log.Err(err).Msg("[UpdateManga]: error binding the request")
+		return c.JSON(
+			net.StatusBadRequest,
+			response.SetErrorCode(net.StatusBadRequest).SetMessage("error process data manga request").SetData(""),
+		)
+	}
+	return c.JSON(200, "SUCCESS")
 }
 
 //	 Delete Manga
@@ -163,6 +207,11 @@ func (m *MangaHttpController) Routes() {
 			Method:  net.MethodGet,
 			Path:    "/manga/:id",
 			Handler: m.DetailManga,
+		},
+		{
+			Method:  net.MethodPut,
+			Path:    "/manga/:id",
+			Handler: m.UpdateManga,
 		},
 		{
 			Method:  net.MethodDelete,
