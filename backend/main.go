@@ -5,7 +5,7 @@ import (
 	_ "bacakomik/docs"
 )
 
-//	@title			Hanan Test
+//	@title		    Manga service API	
 //	@version		1.0.0
 //	@description	Manga service api
 
