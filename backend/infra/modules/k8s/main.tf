@@ -1,14 +1,14 @@
 # Create kubernetes_deployment 
 resource "kubernetes_deployment" "nginx" {
   metadata {
-    name = "scalable-nginx-example"
+    name = "nginx-server-deployment"
     namespace = "terraform"
     labels = {
-      App = "ScalableNginxExample"
+      App = "nginx-server"
     }
   }
   spec {
-    replicas = 4
+    replicas = var.replica_set
     selector {
       match_labels = {
         App = "nginx-server"
@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "nginx" {
           name              = "nginx-server"
           image_pull_policy = "IfNotPresent"
           port {
-            container_port = 80
+            container_port = var.nginx_port
           }
         }
       }
@@ -46,10 +46,10 @@ resource "kubernetes_service" "nginx_terraform" {
     }
     port {
       node_port = 30000 
-      port = 80
-      target_port = 80
+      port = var.nginx_port
+      target_port = var.nginx_port
     }
-    type = "NodePort"
+    type = var.service_type
   }
 }
 
