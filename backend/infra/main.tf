@@ -1,25 +1,54 @@
-terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0.1"
+
+# Create kubernetes_deployment 
+resource "kubernetes_deployment" "nginx" {
+  metadata {
+    name = "scalable-nginx-example"
+    labels = {
+      App = "ScalableNginxExample"
+    }
+  }
+  spec {
+    replicas = 4
+    selector {
+      match_labels = {
+        App = "ScalableNginxExample"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          App = "ScalableNginxExample"
+        }
+      }
+      spec {
+        container {
+          image             = "nginx:latest"
+          name              = "nginxserer"
+          image_pull_policy = "IfNotPresent"
+          port {
+            container_port = 80
+          }
+        }
+      }
     }
   }
 }
 
-provider "docker" {}
-
-resource "docker_image" "nginx" {
-  name         = "nginx:latest"
-  keep_locally = true 
-}
-
-resource "docker_container" "nginx" {
-  name  = var.container_name
-  image = docker_image.nginx.image_id
-  ports {
-    internal = 80
-    external = 8000
+# Create Service
+resource "kubernetes_service" "nginx_terraform" {
+  metadata {
+    name = "nginx-server"
+  }
+  spec {
+    selector = {
+      App = kubernetes_deployment.nginx.spec[0].template[0].metadata[0].labels.App
+    }
+    port {
+      node_port = 30000 
+      port = 80
+      target_port = 80
+    }
+    type = "NodePort"
   }
 }
 
