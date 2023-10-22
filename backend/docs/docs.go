@@ -173,7 +173,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.CreateMangaRequest"
+                            "$ref": "#/definitions/model.UpdateMangaRequest"
                         }
                     }
                 ],
@@ -300,6 +300,32 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateMangaRequest": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "sinopsis": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "total_chapter": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "string"
                 }
             }

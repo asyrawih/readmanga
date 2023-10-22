@@ -57,7 +57,7 @@ func (m *MangaRepository) NewApi() *MangaRepository {
 
 // Update Data
 func (ma *MangaRepository) Update(ctx context.Context, data *entity.Manga, id int) error {
-	query := `UPDATE manga SET title = $1, status = $2, release_date = $3, total_chapter = $4, author = $5, type = $6, sinopsis = $7, created_by = $8 WHERE id = $10;`
+	query := `UPDATE mangas SET title = $1, status = $2, release_date = $3, total_chapter = $4, author = $5, type = $6, sinopsis = $7, created_by = $8 WHERE id = $9;`
 	ct, err := ma.conn.Exec(
 		ctx,
 		query,

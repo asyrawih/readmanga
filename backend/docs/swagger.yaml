@@ -48,6 +48,23 @@ definitions:
       message:
         type: string
     type: object
+  model.UpdateMangaRequest:
+    properties:
+      author:
+        type: string
+      release_date:
+        type: string
+      sinopsis:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      total_chapter:
+        type: integer
+      type:
+        type: string
+    type: object
 host: localhost:3000
 info:
   contact:
@@ -169,7 +186,7 @@ paths:
         name: manga
         required: true
         schema:
-          $ref: '#/definitions/model.CreateMangaRequest'
+          $ref: '#/definitions/model.UpdateMangaRequest'
       produces:
       - application/json
       responses:

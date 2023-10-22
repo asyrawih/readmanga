@@ -16,7 +16,7 @@ import (
 
 type SuccessMessage string
 
-type FailMessage string 
+type FailMessage string
 
 type MangaHttpController struct {
 	service adapter.ServiceMangaCreational
@@ -44,7 +44,8 @@ func rooteHandler(c echo.Context) error {
 //	@Param			manga	body	model.CreateMangaRequest	true	"manga requested info"
 //	@Body			json
 //	@Success		200	{object}	model.Response{data=entity.Manga}
-//	@Router			/manga [post]
+//	@Fail			400     {object}    model.Response{data=FailMessage}
+//	@Router			/manga  [post]
 //
 // GetAllManga method
 func (m *MangaHttpController) createManga(c echo.Context) error {
@@ -86,6 +87,7 @@ func (m *MangaHttpController) createManga(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	model.Response{data=[]entity.Manga}
+//	@Fail			400     {object}    model.Response{data=FailMessage}
 //	@Router			/manga [get]
 //
 // GetAllManga method
@@ -107,6 +109,7 @@ func (m *MangaHttpController) GetAllManga(c echo.Context) error {
 //	@Produce		json
 //	@Param			id	path		int	true	"Manga Id"
 //	@Success		200	{object}	model.Response{data=entity.Manga}
+//	@Fail			400     {object}    model.Response{data=FailMessage}
 //	@Router			/manga/{id} [get]
 //
 // GetAllManga method
@@ -140,7 +143,7 @@ func (m *MangaHttpController) DetailManga(c echo.Context) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id		path		int							true	"Manga Id"
-//	@Param			manga	body		model.CreateMangaRequest	true	"manga requested info"
+//	@Param			manga	body		model.UpdateMangaRequest	true	"manga requested info"
 //	@Success		200		{object}	model.Response{data=SuccessMessage}
 //	@Fail			400     {object}    model.Response{data=FailMessage}
 //	@Router			/manga/{id} [put]
@@ -156,7 +159,38 @@ func (m *MangaHttpController) UpdateManga(c echo.Context) error {
 			response.SetErrorCode(net.StatusBadRequest).SetMessage("error process data manga request").SetData(""),
 		)
 	}
-	return c.JSON(200, "SUCCESS")
+
+	id := c.Param("id")
+	mangaID, err := strconv.Atoi(id)
+	if err != nil {
+		err := response.SetData("").
+			SetErrorCode(net.StatusBadRequest).
+			SetMessage("something wrong with id")
+		return c.JSON(net.StatusBadRequest, err)
+	}
+
+	toModel := &entity.Manga{
+		Title:        updateMangaRequest.Title,
+		Status:       updateMangaRequest.Status,
+		ReleaseDate:  updateMangaRequest.ReleaseDate,
+		TotalChapter: updateMangaRequest.TotalChapter,
+		Author:       updateMangaRequest.Author,
+		Type:         updateMangaRequest.Type,
+		Sinopsis:     updateMangaRequest.Sinopsis,
+		CreatedBy:    2,
+		CreatedAt:    time.Now(),
+	}
+
+	if err := m.service.Update(c.Request().Context(), toModel, mangaID); err != nil {
+		log.Err(err).Msg("")
+	}
+
+	r := response.
+		SetData(SuccessMessage("SUCCESS UPDATED MESSAGE")).
+		SetErrorCode(net.StatusOK).
+		SetMessage("SUCCESS")
+
+	return c.JSON(200, r)
 }
 
 //	 Delete Manga
