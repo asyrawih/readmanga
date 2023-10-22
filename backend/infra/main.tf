@@ -3,6 +3,7 @@
 resource "kubernetes_deployment" "nginx" {
   metadata {
     name = "scalable-nginx-example"
+    namespace = "terraform" 
     labels = {
       App = "ScalableNginxExample"
     }
@@ -37,6 +38,7 @@ resource "kubernetes_deployment" "nginx" {
 # Create Service
 resource "kubernetes_service" "nginx_terraform" {
   metadata {
+    namespace = "terraform"
     name = "nginx-server"
   }
   spec {
