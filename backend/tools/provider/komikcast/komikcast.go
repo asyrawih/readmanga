@@ -1,5 +1,5 @@
 package komikcast
 
 func Start() {
-	ProcessReadChapter()
+	ProcessMangaDetail()
 }

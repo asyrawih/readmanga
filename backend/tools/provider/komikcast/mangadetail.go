@@ -12,7 +12,7 @@ import (
 )
 
 func ProcessMangaDetail() {
-	mangas := LoadFromFile()
+	mangas := LoadFromLiveUrl()
 
 	mangaDetail := make(chan *provider.MangaDetail)
 	done := make(chan struct{})
