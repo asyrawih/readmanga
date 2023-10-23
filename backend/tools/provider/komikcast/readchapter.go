@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -13,6 +12,7 @@ import (
 	"github.com/iain17/go-cfscrape"
 	"github.com/rs/zerolog/log"
 
+	"bacakomik/storage"
 	"bacakomik/tools/provider"
 )
 
@@ -23,7 +23,7 @@ func ProcessReadChapter() {
 	}
 
 	for _, md := range detail {
-		fmt.Printf("md: %v\n", md.Title)
+		fmt.Printf("md: %v", md.Title)
 		for _, chapter := range md.Chapter {
 			if chapter.ChapterURl != "" {
 				GetChapterDetailImage(chapter.ChapterURl)
@@ -47,17 +47,15 @@ func GetChapterDetailImage(chapterURL string) {
 		log.Err(err).Msg("")
 	}
 
-	doc.Find(".main-reading-area").Each(func(_ int, s *goquery.Selection) {
-		chapter_html, _ := s.Find("img").Attr("src")
-		fmt.Printf("chapter_html: %v\n", chapter_html)
-		GetImage(chapter_html)
-
+	doc.Find(".chapter_body").Each(func(_ int, s *goquery.Selection) {
+		s.Find(".main-reading-area img").Each(func(_ int, s *goquery.Selection) {
+			imagesURL, _ := s.Attr("src")
+			GetImage(imagesURL)
+		})
 	})
 }
 
 func GetImage(imageURL string) {
-	outputFile := "./dataset/downloaded_image.jpg"
-
 	req, err := http.NewRequest("GET", imageURL, nil)
 	if err != nil {
 		fmt.Println("Error while creating the request:", err)
@@ -67,7 +65,7 @@ func GetImage(imageURL string) {
 	req.Header.Set("sec-ch-ua", `"Not=A?Brand";v="99", "Chromium";v="118"`)
 	req.Header.Set("Referer", "https://komikcast.ch/")
 	req.Header.Set("DNT", "1")
-	req.Header.Set("sec-ch-ua-mobile", "?0")
+	req.Header.Set("sec-ch-ua-mobile", "?1")
 	req.Header.Set(
 		"User-Agent",
 		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
@@ -89,18 +87,22 @@ func GetImage(imageURL string) {
 		return
 	}
 
-	file, err := os.Create(outputFile)
+	mss := storage.NewMinioStorageServer(
+		"localhost:9000",
+		"LR9boPTBwdBmeQzVHoCO",
+		"7OVcEt2zky9sxs0GwtDEXsJdgVRPshBjEw6IwpBW",
+	)
+	s, err := mss.NewStore()
 	if err != nil {
-		fmt.Println("Error while creating the file:", err)
-		return
+		fmt.Println("fail create new store please check your configuration")
 	}
-	defer file.Close()
 
-	_, err = io.Copy(file, resp.Body)
-	if err != nil {
-		fmt.Println("Error while saving the image:", err)
-		return
-	}
+	f := strings.Split(imageURL, "/")
+	filename := fmt.Sprintf("/manga/sektekomik/%s/%s/%s", f[6], f[7], f[8])
+
+	s.SetBucketName("manga")
+	s.SetObjectName(filename)
+	s.Upload(resp)
 
 	fmt.Println("Image downloaded and saved successfully!")
 }
