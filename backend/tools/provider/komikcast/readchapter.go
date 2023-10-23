@@ -1,17 +1,22 @@
 package komikcast
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/iain17/go-cfscrape"
 	"github.com/rs/zerolog/log"
 
+	"bacakomik/record/entity"
+	"bacakomik/repository"
+	"bacakomik/repository/mysql"
 	"bacakomik/storage"
 	"bacakomik/tools/provider"
 )
@@ -22,15 +27,32 @@ func ProcessReadChapter() {
 		log.Err(err).Msg("")
 	}
 
-	for _, md := range detail {
-		fmt.Printf("md: %v", md.Title)
-		for _, chapter := range md.Chapter {
-			if chapter.ChapterURl != "" {
-				GetChapterDetailImage(chapter.ChapterURl)
-			}
-		}
+	var DSN = "postgres://postgres:postgres@localhost:5432/readmanga"
+	connect, err := repository.Connect(context.Background(), DSN)
+	if err != nil {
+		log.Err(err).Msg("error init database on crawler")
 	}
 
+	mr := mysql.NewMangaRepository(connect)
+
+	for _, md := range detail {
+		mr.Create(context.Background(), &entity.Manga{
+			Title:        md.Title,
+			Status:       md.Status,
+			ReleaseDate:  md.ReleaseDate,
+			TotalChapter: 0,
+			Author:       "unknown",
+			Type:         md.Type,
+			Sinopsis:     md.Sinopsis,
+			CreatedBy:    -1,
+			CreatedAt:    time.Now(),
+		})
+		// for _, chapter := range md.Chapter {
+		// 	if chapter.ChapterURl != "" {
+		// 		GetChapterDetailImage(chapter.ChapterURl)
+		// 	}
+		// }
+	}
 }
 
 // GetChapterDetailImage function
