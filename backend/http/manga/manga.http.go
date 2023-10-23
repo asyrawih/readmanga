@@ -69,7 +69,7 @@ func (m *MangaHttpController) createManga(c echo.Context) error {
 	}
 
 	// Create Manga
-	if err := m.service.Create(c.Request().Context(), manga); err != nil {
+	if _, err := m.service.Create(c.Request().Context(), manga); err != nil {
 		r2 := model.NewResponse().SetErrorCode(net.StatusBadRequest).SetMessage(err.Error()).SetData(nil)
 		return c.JSON(net.StatusBadRequest, r2)
 	}

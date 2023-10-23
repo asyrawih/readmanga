@@ -35,7 +35,7 @@ func TestUserService_Create(t *testing.T) {
 			name: "should success create user",
 			setup: func(ruc *mocks.RepoUserCreational) (*UserService, *entity.User, context.Context) {
 				us, u, ctx := setupUserTest(t, ruc)
-				ruc.On("Create", ctx, u).Return(nil)
+				ruc.On("Create", ctx, u).Return(99, nil)
 				return us, u, ctx
 			},
 			wantError: false,
@@ -46,7 +46,7 @@ func TestUserService_Create(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ruc := mocks.NewRepoUserCreational(t)
 			us, u, ctx := tt.setup(ruc)
-			err := us.Create(ctx, u)
+			_, err := us.Create(ctx, u)
 			if (err != nil) != tt.wantError {
 				t.Errorf("expected %v, actual %v", tt.wantError, err)
 			}

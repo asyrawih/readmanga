@@ -23,13 +23,15 @@ func NewMangaRepository(conn *pgx.Conn) *MangaRepository {
 }
 
 // Create method
-func (m *MangaRepository) Create(ctx context.Context, manga *entity.Manga) error {
+func (m *MangaRepository) Create(ctx context.Context, manga *entity.Manga) (int, error) {
 	sqlString := `
 	        INSERT INTO mangas (title, status, release_date, total_chapter, author, type, sinopsis, created_by)
-			       VALUES ($1, $2,$3,$4,$5,$6,$7,$8)`
+			       VALUES ($1, $2,$3,$4,$5,$6,$7,$8) returning id`
 	log.Info().Msgf("[mysql](Create): create manga %v", manga)
 
-	if _, err := m.conn.Exec(
+	var id int
+
+	r := m.conn.QueryRow(
 		ctx,
 		sqlString,
 		manga.Title,
@@ -40,12 +42,12 @@ func (m *MangaRepository) Create(ctx context.Context, manga *entity.Manga) error
 		manga.Type,
 		manga.Sinopsis,
 		manga.CreatedBy,
-	); err != nil {
-		log.Err(err).Msg("[mysql](Create)")
-		return err
+	)
+	if err := r.Scan(&id); err != nil {
+		log.Err(err).Msg("[mysql](Create): ERROR")
 	}
 	log.Info().Msg("[mysql](Create): Success create")
-	return nil
+	return id, nil
 }
 
 // NewApi method

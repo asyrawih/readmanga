@@ -9,7 +9,7 @@ import (
 
 // Contract of Service manga  as depedency
 type ServiceMangaCreational interface {
-	Creational[entity.Manga]
+	Creational[entity.Manga, int]
 	Modificational[entity.Manga, int]
 	Retrival[entity.Manga, int]
 	Destroyer[int]
@@ -17,41 +17,38 @@ type ServiceMangaCreational interface {
 
 // Contract Repo
 type RepoMangaCreational interface {
-	Creational[entity.Manga]
+	Creational[entity.Manga, int]
 	Modificational[entity.Manga, int]
 	Retrival[entity.Manga, int]
 	Destroyer[int]
 	Accessable[mysql.MangaRepository]
 }
 
-
 // Contract Repo
 type RepoUserCreational interface {
-	Creational[entity.User]
+	Creational[entity.User, int]
 	Modificational[entity.User, int]
 	Retrival[entity.User, int]
 	Destroyer[int]
 	Accessable[mysql.UserRepository]
 }
 
-
 // Contract Repo
 type ServiceUserCreational interface {
-	Creational[entity.User]
+	Creational[entity.User, int]
 	Modificational[entity.User, int]
 	Retrival[entity.User, int]
 	Destroyer[int]
 }
-
 
 type Accessable[T any] interface {
 	// Get Access to instance of of T
 	NewApi() *T
 }
 
-type Creational[T any] interface {
+type Creational[T any, K any] interface {
 	// Create Data
-	Create(ctx context.Context, data *T) error
+	Create(ctx context.Context, data *T) (K, error)
 }
 
 type Modificational[T any, K any] interface {

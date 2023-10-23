@@ -17,17 +17,27 @@ type RepoMangaCreational struct {
 }
 
 // Create provides a mock function with given fields: ctx, data
-func (_m *RepoMangaCreational) Create(ctx context.Context, data *entity.Manga) error {
+func (_m *RepoMangaCreational) Create(ctx context.Context, data *entity.Manga) (int, error) {
 	ret := _m.Called(ctx, data)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *entity.Manga) error); ok {
+	var r0 int
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, *entity.Manga) (int, error)); ok {
+		return rf(ctx, data)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, *entity.Manga) int); ok {
 		r0 = rf(ctx, data)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(int)
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(context.Context, *entity.Manga) error); ok {
+		r1 = rf(ctx, data)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // Delete provides a mock function with given fields: ctx, id

@@ -73,7 +73,7 @@ func TestMangaService_Create(t *testing.T) {
 			name: "should success create manga",
 			setup: func(rmc *mocks.RepoMangaCreational) (*MangaService, *entity.Manga, context.Context) {
 				ms, m, ctx := setupCreateTest(t, rmc)
-				rmc.On("Create", ctx, m).Return(nil)
+				rmc.On("Create", ctx, m).Return(102, nil)
 				return ms, m, ctx
 			},
 			wantError: false,
@@ -83,7 +83,7 @@ func TestMangaService_Create(t *testing.T) {
 			setup: func(rmc *mocks.RepoMangaCreational) (*MangaService, *entity.Manga, context.Context) {
 				ms, m, ctx := setupCreateTest(t, rmc)
 				err := errors.New("error")
-				rmc.On("Create", ctx, mock.Anything).Return(err)
+				rmc.On("Create", ctx, mock.Anything).Return(1, err)
 				return ms, m, ctx
 			},
 			wantError: true,
@@ -93,7 +93,7 @@ func TestMangaService_Create(t *testing.T) {
 			setup: func(rmc *mocks.RepoMangaCreational) (*MangaService, *entity.Manga, context.Context) {
 				ms, _, ctx := setupCreateTest(t, rmc)
 				err := errors.New("error")
-				rmc.On("Create", ctx, mock.Anything).Return(err)
+				rmc.On("Create", ctx, mock.Anything).Return(0, err)
 				return ms, nil, ctx
 			},
 			wantError: true,
@@ -103,7 +103,7 @@ func TestMangaService_Create(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(t.Name(), func(t *testing.T) {
 			ms, m, ctx := tt.setup(rmc)
-			err := ms.Create(ctx, m)
+			_, err := ms.Create(ctx, m)
 			if (err != nil) != tt.wantError {
 				t.Errorf("MangaService.Create() error = %v, wantErr %v", err, tt.wantError)
 			}

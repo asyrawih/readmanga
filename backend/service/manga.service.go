@@ -19,11 +19,8 @@ func NewMangaService(repo adapter.RepoMangaCreational) *MangaService {
 }
 
 // Create Data
-func (ma *MangaService) Create(ctx context.Context, manga *entity.Manga) error {
-	if err := ma.repo.Create(ctx, manga); err != nil {
-		return err
-	}
-	return nil
+func (ma *MangaService) Create(ctx context.Context, manga *entity.Manga) (int, error) {
+	return ma.repo.Create(ctx, manga)
 }
 
 // Get All Data

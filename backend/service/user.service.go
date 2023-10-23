@@ -19,7 +19,6 @@ func NewUserService(repo adapter.RepoUserCreational) *UserService {
 }
 
 // Create Data
-func (us *UserService) Create(ctx context.Context, data *entity.User) error {
-	err := us.repo.Create(ctx, data)
-	return err
+func (us *UserService) Create(ctx context.Context, data *entity.User) (int, error) {
+	return us.repo.Create(ctx, data)
 }

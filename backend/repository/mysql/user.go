@@ -21,8 +21,8 @@ func NewUserRepository(conn *pgx.Conn) *UserRepository {
 }
 
 // Create Data
-func (us *UserRepository) Create(ctx context.Context, data *entity.User) error {
-	return nil
+func (us *UserRepository) Create(ctx context.Context, data *entity.User) (int, error) {
+	return 0, nil
 }
 
 // Get All Data
