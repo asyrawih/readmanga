@@ -86,7 +86,7 @@ func (ma *MangaRepository) Update(ctx context.Context, data *entity.Manga, id in
 // Get All Data
 func (ma *MangaRepository) GetAll(ctx context.Context) []*entity.Manga {
 	var mangas []*entity.Manga
-	sqlString := `SELECT title, status, release_date, total_chapter, author, type, sinopsis, created_by from mangas LIMIT 100;`
+	sqlString := `SELECT id, title, status, release_date, total_chapter, author, type, sinopsis, created_by from mangas LIMIT 100;`
 	if err := pgxscan.Select(ctx, ma.conn, &mangas, sqlString); err != nil {
 		log.Err(err)
 	}

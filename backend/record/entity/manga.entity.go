@@ -8,16 +8,16 @@ import (
 )
 
 type Manga struct {
-	ID           int       `json:"id,omitempty"`
-	Title        string    `json:"title,omitempty"`
-	Status       string    `json:"status,omitempty"`
-	ReleaseDate  string    `json:"release_date,omitempty"`
-	TotalChapter int       `json:"total_chapter,omitempty"`
-	Author       string    `json:"author,omitempty"`
-	Type         string    `json:"type,omitempty"`
-	Sinopsis     string    `json:"sinopsis,omitempty"`
-	CreatedBy    int       `json:"created_by,omitempty"`
-	CreatedAt    time.Time `json:"created_at,omitempty"`
+	ID           int       `json:"id,omitempty" db:"id"`
+	Title        string    `json:"title,omitempty" db:"title"`
+	Status       string    `json:"status,omitempty" db:"status"`
+	ReleaseDate  string    `json:"release_date,omitempty" db:"release_date"`
+	TotalChapter int       `json:"total_chapter,omitempty" db:"total_chapter"`
+	Author       string    `json:"author,omitempty" db:"author"`
+	Type         string    `json:"type,omitempty" db:"type"`
+	Sinopsis     string    `json:"sinopsis,omitempty" db:"sinopsis"`
+	CreatedBy    int       `json:"created_by,omitempty" db:"created_by"`
+	CreatedAt    time.Time `json:"created_at,omitempty" db:"created_at"`
 }
 
 // Convert The Struct into json
