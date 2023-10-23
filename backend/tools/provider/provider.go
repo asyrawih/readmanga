@@ -27,7 +27,7 @@ func (p *Provider) AddProvider(url string) {
 }
 
 // saveJSON function
-func saveJSON(filename string, data []*Mangalist) {
+func SaveJSON[T any](filename string, data []*T) {
 	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		log.Err(err).Msg("Error encoding JSON")

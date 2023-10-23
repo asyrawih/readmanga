@@ -1,7 +1,10 @@
-package provider
+package komikcast
 
 import (
+	"bacakomik/tools/provider"
+	"encoding/json"
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 	"sync/atomic"
@@ -11,17 +14,45 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func Start() {
-	p := NewProvider()
+func GetDates(input string) []string {
+	// Define the regular expression pattern for dates
+	pattern := `([A-Za-z]{3}\s\d{1,2},\s\d{4})`
 
+	// Compile the regular expression pattern
+	reg := regexp.MustCompile(pattern)
+
+	// Find all occurrences of the pattern in the input string
+	matches := reg.FindAllString(input, -1)
+
+	return matches
+}
+
+// LoadFromFile function
+func LoadFromFile() []*provider.Mangalist {
+	b, err := os.ReadFile("./dataset/mangalist.json")
+	if err != nil {
+		log.Err(err).Msg("")
+	}
+
+	r := strings.NewReader(string(b))
+	var mangas []*provider.Mangalist
+	d := json.NewDecoder(r)
+	if err := d.Decode(&mangas); err != nil {
+		log.Err(err).Msg("Fail decode data from file")
+	}
+	return mangas
+}
+
+// LoadFromLiveUrl function
+func LoadFromLiveUrl() []*provider.Mangalist {
+	p := provider.NewProvider()
 	counter := atomic.Int64{}
-
-	for i := 0; i < 1; i++ {
+	for i := 0; i < 283; i++ {
 		s := fmt.Sprintf("https://komikcast.ch/daftar-komik/page/%d", i)
 		p.AddProvider(s)
 	}
 
-	komikUrls := make(chan Mangalist)
+	komikUrls := make(chan provider.Mangalist)
 	done := make(chan struct{})
 
 	go WaitAll(p, done, komikUrls)
@@ -30,21 +61,21 @@ func Start() {
 		go visit(u, komikUrls, done, &counter)
 	}
 
-	var mangalist []*Mangalist
+	var mangalist []*provider.Mangalist
 	for m := range komikUrls {
-		mangalist = append(mangalist, &Mangalist{
+		mangalist = append(mangalist, &provider.Mangalist{
 			Title:    m.Title,
 			Url:      m.Url,
 			ImageUrl: m.ImageUrl,
 		})
 	}
-	saveJSON("./dataset/mangalist.json", mangalist)
+	provider.SaveJSON("./dataset/mangalist.json", mangalist)
 
 	fmt.Printf("counter: %+v\n", &counter)
-
+	return mangalist
 }
 
-func WaitAll(p *Provider, done chan struct{}, komikUrls chan Mangalist) {
+func WaitAll(p *provider.Provider, done chan struct{}, komikUrls chan provider.Mangalist) {
 	go func() {
 		// Receive signals from the done channel
 		for range p.SiteURL {
@@ -54,7 +85,7 @@ func WaitAll(p *Provider, done chan struct{}, komikUrls chan Mangalist) {
 	}()
 }
 
-func visit(url string, komikUrls chan Mangalist, done chan struct{}, couunter *atomic.Int64) {
+func visit(url string, komikUrls chan provider.Mangalist, done chan struct{}, couunter *atomic.Int64) {
 	defer func() {
 		done <- struct{}{}
 	}()
@@ -87,7 +118,7 @@ func visit(url string, komikUrls chan Mangalist, done chan struct{}, couunter *a
 		}
 
 		couunter.Add(1)
-		komikUrls <- Mangalist{
+		komikUrls <- provider.Mangalist{
 			Title:    ret,
 			Url:      val,
 			ImageUrl: imageUrl,

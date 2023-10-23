@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bacakomik/tools/provider"
+	"bacakomik/tools/provider/komikcast"
 )
 
 func main() {
-	provider.Start()
+	komikcast.Start()
 }
