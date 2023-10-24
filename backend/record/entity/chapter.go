@@ -7,3 +7,7 @@ type Chapter struct {
 	Chapter string `json:"chapter,omitempty"`
 	Content string `json:"content,omitempty"`
 }
+
+func (ch *Chapter) String() string {
+	return "chapter"
+}
