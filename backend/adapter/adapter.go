@@ -7,6 +7,22 @@ import (
 	"bacakomik/repository/mysql"
 )
 
+// ChapterRepoCreational interface
+type ServiceChapterCreational interface {
+	Creational[entity.Chapter, int]
+	Modificational[entity.Chapter, int]
+	Retrival[entity.Chapter, int]
+	Destroyer[int]
+}
+
+// ChapterRepoCreational interface
+type ChapterRepoCreational interface {
+	Creational[entity.Chapter, int]
+	Modificational[entity.Chapter, int]
+	Retrival[entity.Chapter, int]
+	Destroyer[int]
+}
+
 // Contract of Service manga  as depedency
 type ServiceMangaCreational interface {
 	Creational[entity.Manga, int]
@@ -15,7 +31,7 @@ type ServiceMangaCreational interface {
 	Destroyer[int]
 }
 
-// Contract Repo
+// Contract MAnga Repo
 type RepoMangaCreational interface {
 	Creational[entity.Manga, int]
 	Modificational[entity.Manga, int]
@@ -24,7 +40,7 @@ type RepoMangaCreational interface {
 	Accessable[mysql.MangaRepository]
 }
 
-// Contract Repo
+// Contract User Repo
 type RepoUserCreational interface {
 	Creational[entity.User, int]
 	Modificational[entity.User, int]
@@ -33,7 +49,7 @@ type RepoUserCreational interface {
 	Accessable[mysql.UserRepository]
 }
 
-// Contract Repo
+// Contract User Repo
 type ServiceUserCreational interface {
 	Creational[entity.User, int]
 	Modificational[entity.User, int]

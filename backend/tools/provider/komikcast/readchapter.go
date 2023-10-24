@@ -136,6 +136,7 @@ func GetImage(imageURL string) {
 	fmt.Println("Image downloaded and saved successfully!")
 }
 
+// LoadReadMangaDetil function
 func LoadReadMangaDetil() ([]*provider.MangaDetail, error) {
 	b, err := os.ReadFile("./dataset/manga-detail.json")
 	if err != nil {
