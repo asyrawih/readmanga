@@ -8,6 +8,11 @@ type Chapter struct {
 	Content string `json:"content,omitempty"`
 }
 
+type ChapterWithMedia struct {
+	Chapter Chapter `json:"chapter,omitempty"`
+	Medias  []Media `json:"medias,omitempty"`
+}
+
 func (ch *Chapter) String() string {
-	return "chapter"
+	return "chapters"
 }

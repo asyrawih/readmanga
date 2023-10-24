@@ -1,6 +1,8 @@
 package chapter
 
 import (
+	"strconv"
+
 	"github.com/labstack/echo/v4"
 
 	net "net/http"
@@ -63,19 +65,41 @@ func (cr *ChapterController) Create(c echo.Context) error {
 	return c.JSON(net.StatusOK, r)
 }
 
+// FindOne method
+// Get Chapter And Then Attach Media Relation
+func (cr *ChapterController) FindOne(c echo.Context) error {
+	response := model.NewResponse()
+	paramsID := c.Param("chapterID")
+	chapterID, err := strconv.Atoi(paramsID)
+	if err != nil {
+		r := response.SetErrorCode(net.StatusBadRequest).SetMessage("params must be in number type")
+		return c.JSON(net.StatusBadRequest, r)
+	}
+
+	// Get chapter one
+	chapterDetail := cr.service.GetOne(c.Request().Context(), int(chapterID))
+	r := response.SetErrorCode(net.StatusOK).SetMessage(SuccessMessage).SetData(chapterDetail)
+	return c.JSON(net.StatusOK, r)
+}
+
 // Routes method
 func (cr *ChapterController) Routes() {
 	r := http.NewRoutes()
 	routes := []http.Route{
 		{
-			Method:  "GET",
+			Method:  net.MethodGet,
 			Path:    "/chapter",
 			Handler: cr.GetChapter,
 		},
 		{
-			Method:  "POST",
+			Method:  net.MethodPost,
 			Path:    "/chapter",
-			Handler: cr.GetChapter,
+			Handler: cr.Create,
+		},
+		{
+			Method:  net.MethodGet,
+			Path:    "/chapter/:chapterID",
+			Handler: cr.FindOne,
 		},
 	}
 	r.Routes = append(r.Routes, routes...)

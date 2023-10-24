@@ -11,7 +11,7 @@ import (
 type ServiceChapterCreational interface {
 	Creational[entity.Chapter, int]
 	Modificational[entity.Chapter, int]
-	Retrival[entity.Chapter, int]
+	Retrival[entity.ChapterWithMedia, int]
 	Destroyer[int]
 }
 
@@ -21,6 +21,7 @@ type ChapterRepoCreational interface {
 	Modificational[entity.Chapter, int]
 	Retrival[entity.Chapter, int]
 	Destroyer[int]
+	Accessable[mysql.ChapterRepositry]
 }
 
 // Contract of Service manga  as depedency
