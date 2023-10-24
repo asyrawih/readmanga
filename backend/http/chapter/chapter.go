@@ -3,6 +3,8 @@ package chapter
 import (
 	"github.com/labstack/echo/v4"
 
+	net "net/http"
+
 	"bacakomik/adapter"
 	"bacakomik/http"
 )
@@ -13,7 +15,7 @@ type ChapterController struct {
 	server  *http.HTTPServer
 }
 
-func NewChapterHTTPController(server *http.HTTPServer, service adapter.ServiceChapterCreational) *ChapterController {
+func NewChapterHTTP(server *http.HTTPServer, service adapter.ServiceChapterCreational) *ChapterController {
 	return &ChapterController{
 		service: service,
 		server:  server,
@@ -21,21 +23,19 @@ func NewChapterHTTPController(server *http.HTTPServer, service adapter.ServiceCh
 }
 
 // GetChapter function
-func GetChapter(c echo.Context) error {
-	return nil
+func (cr *ChapterController) GetChapter(c echo.Context) error {
+	return c.JSON(net.StatusOK, "oke")
 }
 
-func (m *ChapterController) Routes() {
+func (cr *ChapterController) Routes() {
 	r := http.NewRoutes()
 	routes := []http.Route{
 		{
-			Method: "GET",
-			Path:   "/chapter",
-			Handler: func(c echo.Context) error {
-				return nil
-			},
+			Method:  "GET",
+			Path:    "/chapter",
+			Handler: cr.GetChapter,
 		},
 	}
 	r.Routes = append(r.Routes, routes...)
-	m.server.RegisterRoute(r)
+	cr.server.RegisterRoute(r)
 }
