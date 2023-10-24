@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
+
 	"bacakomik/adapter"
 	"bacakomik/record/entity"
 )
