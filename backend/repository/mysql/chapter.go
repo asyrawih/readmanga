@@ -38,7 +38,7 @@ func (ch *ChapterRepositry) Create(ctx context.Context, data *entity.Chapter) (i
 
 // Get All Data
 func (ch *ChapterRepositry) GetAll(ctx context.Context) []*entity.Chapter {
-	sqlString := `select id, mangas_id, chapter,content from chapters`
+	sqlString := `select * from chapters order by chapter desc LIMIT 200;`
 	var out []*entity.Chapter
 
 	r, err := ch.conn.Query(ctx, sqlString)

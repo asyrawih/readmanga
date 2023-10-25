@@ -34,6 +34,7 @@ func ProcessReadChapter() {
 	}
 
 	mr := mysql.NewMangaRepository(connect)
+	cr := mysql.NewChapterRepository(connect)
 
 	for _, md := range detail {
 		title := strings.Trim(md.Title, "\n")
@@ -53,12 +54,16 @@ func ProcessReadChapter() {
 		if err != nil {
 			log.Err(err).Msg("")
 		}
-		fmt.Printf("id: %v\n", id)
-		// for _, chapter := range md.Chapter {
-		// 	if chapter.ChapterURl != "" {
-		// 		GetChapterDetailImage(chapter.ChapterURl)
-		// 	}
-		// }
+		for _, chapter := range md.Chapter {
+			if chapter.ChapterURl != "" {
+				// GetChapterDetailImage(chapter.ChapterUR)
+				cr.Create(context.Background(), &entity.Chapter{
+					MangaID: id,
+					Chapter: chapter.Chapter,
+					Content: md.Title,
+				})
+			}
+		}
 	}
 }
 
