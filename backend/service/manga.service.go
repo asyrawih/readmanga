@@ -3,8 +3,11 @@ package service
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
+
 	"bacakomik/adapter"
 	"bacakomik/record/entity"
+	"bacakomik/record/model"
 )
 
 type MangaService struct {
@@ -33,6 +36,24 @@ func (ma *MangaService) GetAll(ctx context.Context) []*entity.Manga {
 func (ma *MangaService) GetOne(ctx context.Context, id int) *entity.Manga {
 	m := ma.repo.GetOne(ctx, id)
 	return m
+}
+
+// GetMangaWithChapters method
+func (ma *MangaService) GetMangaWithChapters(ctx context.Context, id int) model.GetMangaChapter {
+	var mangaChapter model.GetMangaChapter
+	m := ma.repo.GetOne(ctx, id)
+	mangaChapter.Manga = *m
+	c, err := ma.repo.NewApi().GetChapters(ctx, id)
+	if err != nil {
+		log.Err(err).Msg("")
+	}
+	mangaChapter.Chapters = c
+	return mangaChapter
+}
+
+// Get Access to instance of of T
+func (ma *MangaService) NewApi() *MangaService {
+	return ma
 }
 
 // Update Data

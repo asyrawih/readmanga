@@ -26,7 +26,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "List manga",
                 "responses": {
@@ -62,7 +62,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "craete chapter",
                 "parameters": [
@@ -108,7 +108,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "List manga",
                 "parameters": [
@@ -351,6 +351,157 @@
                     }
                 }
             }
+        },
+        "/media": {
+            "post": {
+                "description": "create media",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media"
+                ],
+                "summary": "create Media",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "image file",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "model_id",
+                        "name": "model_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "model_type",
+                        "name": "model_type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "location",
+                        "name": "manga",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "location",
+                        "name": "chapter",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/entity.Media"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/media/batch": {
+            "post": {
+                "description": "create media",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "media"
+                ],
+                "summary": "create Media",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "image file",
+                        "name": "images",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "model_id",
+                        "name": "model_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "model_type",
+                        "name": "model_type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "judul manga",
+                        "name": "manga",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "chapter manga",
+                        "name": "chapter",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/entity.Media"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -402,6 +553,23 @@
                     "type": "integer"
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Media": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "model_id": {
+                    "type": "integer"
+                },
+                "model_type": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }
@@ -485,4 +653,3 @@
             }
         }
     }
-}

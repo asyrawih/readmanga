@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"errors"
+	"io"
 	"net/http"
 
 	"github.com/minio/minio-go/v7"
@@ -68,6 +69,26 @@ func (m *Store) Upload(r *http.Response) error {
 		log.Err(err).Msg("")
 		return errors.New("error while uploading the image to MinIO")
 	}
+
+	return nil
+}
+
+// Upload method
+func (m *Store) UploadRead(r io.Reader, size int64) error {
+	info, err := m.client.PutObject(
+		context.Background(),
+		m.BucketName,
+		m.Objectname,
+		r,
+		size,
+		minio.PutObjectOptions{},
+	)
+	if err != nil {
+		log.Err(err).Msg("")
+		return errors.New("error while uploading the image to MinIO")
+	}
+
+	log.Info().Any("info", info)
 
 	return nil
 }
