@@ -49,15 +49,35 @@ func (cr *ChapterController) GetChapter(c echo.Context) error {
 	return c.JSON(net.StatusOK, r)
 }
 
-// Create method
+// Create Chapter
+//
+//	@Summary	    craete chapter
+//	@Description    create chapters
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Param			manga	body	model.CreateChapterRequest true	"manga requested info"
+//	@Body			json
+//	@Success		200	{object}	model.Response{data=entity.Chapter}
+//	@Fail			400     {object}    model.Response{data=FailMessage}
+//	@Router			/chapter [post]
+//
+// GetAllManga method
 func (cr *ChapterController) Create(c echo.Context) error {
-	var data *entity.Chapter
+	var data *model.CreateChapterRequest
 	response := model.NewResponse()
 	if err := c.Bind(&data); err != nil {
 		r := response.SetMessage(FailMessage).SetData("").SetErrorCode(net.StatusBadRequest)
 		return c.JSON(net.StatusBadRequest, r)
 	}
-	if _, err := cr.service.Create(c.Request().Context(), data); err != nil {
+
+	mapToChapter := &entity.Chapter{
+		MangaID: data.MangaID,
+		Chapter: data.Chapter,
+		Content: data.Content,
+	}
+
+	if _, err := cr.service.Create(c.Request().Context(), mapToChapter); err != nil {
 		r := response.SetMessage(FailMessage).SetData("").SetErrorCode(net.StatusBadRequest)
 		return c.JSON(net.StatusBadRequest, r)
 	}

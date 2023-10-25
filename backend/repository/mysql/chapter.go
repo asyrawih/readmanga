@@ -25,8 +25,8 @@ func NewChapterRepository(conn *pgx.Conn) *ChapterRepositry {
 func (ch *ChapterRepositry) Create(ctx context.Context, data *entity.Chapter) (int, error) {
 	var chapterID int
 	// Insert into chapter
-	sqlString := `INSERT INTO chapters (manga_id, chapter , content)
-					VALUES ($1 , $2 ,$2) returning id`
+	sqlString := `INSERT INTO chapters (mangas_id, chapter , content)
+					VALUES ($1 , $2 ,$3) returning id`
 
 	r := ch.conn.QueryRow(ctx, sqlString, data.MangaID, data.Chapter, data.Content)
 	if err := r.Scan(&chapterID); err != nil {
@@ -70,7 +70,7 @@ func (ch *ChapterRepositry) GetOne(ctx context.Context, id int) *entity.Chapter 
 
 // Update Data
 func (ch *ChapterRepositry) Update(ctx context.Context, data *entity.Chapter, id int) error {
-	panic("not implemented") // TODO: Implement
+	return nil
 }
 
 // Delete the record
