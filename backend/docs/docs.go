@@ -32,7 +32,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "List manga",
                 "responses": {
@@ -68,7 +68,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "craete chapter",
                 "parameters": [
@@ -114,7 +114,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "List manga",
                 "parameters": [
@@ -368,7 +368,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "media"
                 ],
                 "summary": "create Media",
                 "parameters": [
@@ -440,7 +440,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "media"
                 ],
                 "summary": "create Media",
                 "parameters": [
