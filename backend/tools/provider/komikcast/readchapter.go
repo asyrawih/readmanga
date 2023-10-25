@@ -12,6 +12,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/iain17/go-cfscrape"
+	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog/log"
 
 	"bacakomik/record/entity"
@@ -22,6 +23,11 @@ import (
 )
 
 func ProcessReadChapter() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Err(errors.New("[ProcessReadChapter]: got panic try to restore it")).Msg("")
+		}
+	}()
 	detail, err := LoadReadMangaDetil()
 	if err != nil {
 		log.Err(err).Msg("")
@@ -35,6 +41,9 @@ func ProcessReadChapter() {
 
 	mr := mysql.NewMangaRepository(connect)
 	cr := mysql.NewChapterRepository(connect)
+
+	workerPool := make(chan struct{}, 20)
+	defer close(workerPool)
 
 	for _, md := range detail {
 		title := strings.Trim(md.Title, "\n")
@@ -56,19 +65,31 @@ func ProcessReadChapter() {
 		}
 		for _, chapter := range md.Chapter {
 			if chapter.ChapterURl != "" {
-				// GetChapterDetailImage(chapter.ChapterUR)
-				cr.Create(context.Background(), &entity.Chapter{
+				cID, err := cr.Create(context.Background(), &entity.Chapter{
 					MangaID: id,
 					Chapter: chapter.Chapter,
 					Content: md.Title,
 				})
+				if err != nil {
+					log.Err(err).Msg("")
+				}
+				workerPool <- struct{}{}
+				log.Info().Msgf("worker pool 20 from %v", len(workerPool))
+				go GetChapterDetailImage(chapter.ChapterURl, connect, cID, workerPool)
 			}
 		}
 	}
 }
 
 // GetChapterDetailImage function
-func GetChapterDetailImage(chapterURL string) {
+func GetChapterDetailImage(chapterURL string, conn *pgx.Conn, cID int, worker <-chan struct{}) {
+	defer func() {
+		<-worker
+		if r := recover(); r != nil {
+			log.Err(errors.New("panice will recover")).Msg("")
+		}
+	}()
+	media := mysql.NewMediaRepository(conn)
 	r, err := cfscrape.Get(chapterURL)
 	if err != nil {
 		log.Err(err).Msg("")
@@ -84,16 +105,21 @@ func GetChapterDetailImage(chapterURL string) {
 	doc.Find(".chapter_body").Each(func(_ int, s *goquery.Selection) {
 		s.Find(".main-reading-area img").Each(func(_ int, s *goquery.Selection) {
 			imagesURL, _ := s.Attr("src")
-			GetImage(imagesURL)
+			komikcastURL := GetImage(imagesURL)
+			media.Create(context.Background(), &entity.Media{
+				ModelType: "chapters",
+				ModelID:   cID,
+				URL:       komikcastURL,
+			})
 		})
 	})
 }
 
-func GetImage(imageURL string) {
+func GetImage(imageURL string) string {
 	req, err := http.NewRequest("GET", imageURL, nil)
 	if err != nil {
 		fmt.Println("Error while creating the request:", err)
-		return
+		return ""
 	}
 
 	req.Header.Set("sec-ch-ua", `"Not=A?Brand";v="99", "Chromium";v="118"`)
@@ -111,14 +137,12 @@ func GetImage(imageURL string) {
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("Error while fetching the image:", err)
-		return
 	}
 	defer resp.Body.Close()
 
 	// Check if the response was successful
 	if resp.StatusCode != http.StatusOK {
 		fmt.Println("Failed to fetch the image:", resp.Status)
-		return
 	}
 
 	mss := storage.NewMinioStorageServer(
@@ -132,13 +156,15 @@ func GetImage(imageURL string) {
 	}
 
 	f := strings.Split(imageURL, "/")
-	filename := fmt.Sprintf("/manga/sektekomik/%s/%s/%s", f[6], f[7], f[8])
+	filename := fmt.Sprintf("/sektekomik/%s/%s/%s", f[6], f[7], f[8])
 
 	s.SetBucketName("manga")
 	s.SetObjectName(filename)
 	s.Upload(resp)
 
-	fmt.Println("Image downloaded and saved successfully!")
+	log.Info().Msgf("Image downloaded and saved successfully! url:%s", filename)
+	return filename
+
 }
 
 // LoadReadMangaDetil function
