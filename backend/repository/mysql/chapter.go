@@ -106,26 +106,3 @@ func (ch *ChapterRepositry) GetMedias(ctx context.Context, model_id int) []*enti
 	}
 	return medias
 }
-
-// Get Access to instance of of T
-func (ch *ChapterRepositry) NewApi() *ChapterRepositry {
-	return ch
-}
-
-// GetMedias method
-// Get Access Into Media
-func (ch *ChapterRepositry) GetMedias(ctx context.Context, model_id int) []*entity.Media {
-	c := new(entity.Chapter)
-	var medias []*entity.Media
-	sqlString := `select id, model_type, model_id , url from medias as m where m.model_id = $1 and m.model_type = $2;`
-	r, err := ch.conn.Query(ctx, sqlString, model_id, c.String())
-	if err != nil {
-		log.Err(err).Msg("")
-	}
-	for r.Next() {
-		m := new(entity.Media)
-		r.Scan(&m.ID, &m.ModelType, &m.ModelType, &m.URL)
-		medias = append(medias, m)
-	}
-	return medias
-}

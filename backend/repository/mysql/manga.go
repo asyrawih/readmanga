@@ -57,6 +57,18 @@ func (m *MangaRepository) NewApi() *MangaRepository {
 	return m
 }
 
+// GetChapters method
+// Get All Chapter by mangas_id relation
+func (m *MangaRepository) GetChapters(ctx context.Context, manga_id int) ([]entity.Chapter, error) {
+	var chapters []entity.Chapter
+	sqlString := `SELECT id,mangas_id,chapter FROM chapters where chapters.mangas_id = 10067;`
+	if err := pgxscan.Select(ctx, m.conn, &chapters, sqlString); err != nil {
+		log.Err(err).Msg("")
+		return nil, err
+	}
+	return chapters, nil
+}
+
 // Update Data
 func (ma *MangaRepository) Update(ctx context.Context, data *entity.Manga, id int) error {
 	query := `UPDATE mangas SET title = $1, status = $2, release_date = $3, total_chapter = $4, author = $5, type = $6, sinopsis = $7, created_by = $8 WHERE id = $9;`

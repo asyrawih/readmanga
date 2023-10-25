@@ -37,7 +37,7 @@ func NewMangaHttpServer(server *http.HTTPServer, service adapter.ServiceMediaCre
 //
 //	@Summary		create Media
 //	@Description	create media
-//	@Tags			manga
+//	@Tags		    media
 //	@Accept			mpfd
 //	@Produce		json
 //	@Param			image	   formData	file	true	"image file"
@@ -99,7 +99,7 @@ func (m *MediaHttpController) Upload(c echo.Context) error {
 //
 //	@Summary		create Media
 //	@Description	create media
-//	@Tags			manga
+//	@Tags		    media
 //	@Accept			mpfd
 //	@Produce		json
 //	@Param			images     formData	[]file	true	"image file"
