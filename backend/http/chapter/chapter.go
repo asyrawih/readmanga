@@ -65,6 +65,18 @@ func (cr *ChapterController) Create(c echo.Context) error {
 	return c.JSON(net.StatusOK, r)
 }
 
+// Listmanga list all existing manga
+//
+//		@Summary		List manga
+//		@Description	get all manga
+//		@Tags			manga
+//		@Accept			json
+//		@Produce		json
+//	    @Param			chapterID path		int	true	"Manga Id"
+//		@Success		200	{object}	model.Response{data=[]entity.Chapter}
+//		@Fail			400 {object}    model.Response{data=FailMessage}
+//		@Router			/chapter/{chapterID}    [get]
+//
 // FindOne method
 // Get Chapter And Then Attach Media Relation
 func (cr *ChapterController) FindOne(c echo.Context) error {

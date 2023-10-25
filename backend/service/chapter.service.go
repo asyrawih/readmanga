@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
-
 	"bacakomik/adapter"
 	"bacakomik/record/entity"
 )
@@ -32,7 +30,12 @@ func (ch *ChapterService) GetAll(ctx context.Context) []*entity.ChapterWithMedia
 	chap := ch.repo.GetAll(ctx)
 	for _, c := range chap {
 		cwm := new(entity.ChapterWithMedia)
-		cwm.Chapter = *c
+		cwm.Chapter = entity.Chapter{
+			ID:      c.ID,
+			MangaID: c.MangaID,
+			Chapter: c.Chapter,
+			Content: c.Content,
+		}
 		chm = append(chm, cwm)
 	}
 	return chm
@@ -44,7 +47,6 @@ func (ch *ChapterService) GetOne(ctx context.Context, id int) *entity.ChapterWit
 	cwm := new(entity.ChapterWithMedia)
 	cwm.Chapter = *c
 	medias := ch.repo.NewApi().GetMedias(ctx, id)
-	log.Info().Msgf("%v", medias)
 	for _, m := range medias {
 		cwm.Medias = append(cwm.Medias, *m)
 	}
@@ -53,7 +55,8 @@ func (ch *ChapterService) GetOne(ctx context.Context, id int) *entity.ChapterWit
 
 // Delete the record
 func (ch *ChapterService) Delete(ctx context.Context, id int) bool {
-	panic("not implemented") // TODO: Implement
+	b := ch.repo.Delete(ctx, id)
+	return b
 }
 
 // Update Data

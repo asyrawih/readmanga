@@ -22,6 +22,91 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/chapter": {
+            "get": {
+                "description": "get all manga",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "manga"
+                ],
+                "summary": "List manga",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/entity.Chapter"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/chapter/{chapterID}": {
+            "get": {
+                "description": "get all manga",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "manga"
+                ],
+                "summary": "List manga",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Manga Id",
+                        "name": "chapterID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/entity.Chapter"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/manga": {
             "get": {
                 "description": "get all manga",
@@ -231,6 +316,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.Chapter": {
+            "type": "object",
+            "properties": {
+                "chapter": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "manga_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.Manga": {
             "type": "object",
             "properties": {
@@ -339,7 +441,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:3000",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Hanan Test",
+	Title:            "Manga service API",
 	Description:      "Manga service api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

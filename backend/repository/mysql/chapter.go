@@ -48,7 +48,7 @@ func (ch *ChapterRepositry) GetAll(ctx context.Context) []*entity.Chapter {
 
 	for r.Next() {
 		c := new(entity.Chapter)
-		if err := r.Scan(&c.ID, &c.Chapter, &c.MangaID, &c.Content); err != nil {
+		if err := r.Scan(&c.ID, &c.MangaID, &c.Chapter, &c.Content); err != nil {
 			log.Err(err).Msg("[mysql](GetAll)")
 		}
 		out = append(out, c)
@@ -75,7 +75,13 @@ func (ch *ChapterRepositry) Update(ctx context.Context, data *entity.Chapter, id
 
 // Delete the record
 func (ch *ChapterRepositry) Delete(ctx context.Context, id int) bool {
-	panic("not implemented") // TODO: Implement
+	sqlString := `delete from chapters as c where c.id = $1`
+	ct, err := ch.conn.Exec(ctx, sqlString, id)
+	if err != nil {
+		log.Err(err).Msg("[mysql](delete):")
+		return false
+	}
+	return ct.Delete()
 }
 
 // Get Access to instance of of T
