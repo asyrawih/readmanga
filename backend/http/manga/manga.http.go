@@ -120,13 +120,7 @@ func (m *MangaHttpController) DetailManga(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	manga := m.service.GetOne(c.Request().Context(), mangaID)
-	if manga == nil {
-		r := response.SetMessage("not found").
-			SetErrorCode(net.StatusNotFound).
-			SetData("NOT FOUND")
-		return c.JSON(net.StatusNotFound, r)
-	}
+	manga := m.service.GetMangaWithChapters(c.Request().Context(), mangaID)
 
 	successResponse := response.
 		SetMessage("SUCCESS").

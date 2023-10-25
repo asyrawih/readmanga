@@ -26,7 +26,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "List manga",
                 "responses": {
@@ -62,7 +62,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "craete chapter",
                 "parameters": [
@@ -108,7 +108,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "chapters"
                 ],
                 "summary": "List manga",
                 "parameters": [
@@ -362,7 +362,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "media"
                 ],
                 "summary": "create Media",
                 "parameters": [
@@ -434,7 +434,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "manga"
+                    "media"
                 ],
                 "summary": "create Media",
                 "parameters": [

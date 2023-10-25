@@ -35,7 +35,7 @@ func NewChapterHTTP(server *http.HTTPServer, service adapter.ServiceChapterCreat
 //
 //	@Summary		List manga
 //	@Description	get all manga
-//	@Tags			manga
+//	@Tags		    chapters
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	model.Response{data=[]entity.Chapter}
@@ -53,7 +53,7 @@ func (cr *ChapterController) GetChapter(c echo.Context) error {
 //
 //	@Summary		craete chapter
 //	@Description	create chapters
-//	@Tags			manga
+//	@Tags		    chapters
 //	@Accept			json
 //	@Produce		json
 //	@Param			manga	body	model.CreateChapterRequest	true	"manga requested info"
@@ -89,7 +89,7 @@ func (cr *ChapterController) Create(c echo.Context) error {
 //
 //	@Summary		List manga
 //	@Description	get all manga
-//	@Tags			manga
+//	@Tags		    chapters
 //	@Accept			json
 //	@Produce		json
 //	@Param			chapterID	path		int	true	"Manga Id"
