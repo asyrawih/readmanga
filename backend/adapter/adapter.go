@@ -2,61 +2,7 @@ package adapter
 
 import (
 	"context"
-
-	"bacakomik/record/entity"
-	"bacakomik/repository/mysql"
 )
-
-// ChapterRepoCreational interface
-type ServiceChapterCreational interface {
-	Creational[entity.Chapter, int]
-	Modificational[entity.Chapter, int]
-	Retrival[entity.ChapterWithMedia, int]
-	Destroyer[int]
-}
-
-// ChapterRepoCreational interface
-type ChapterRepoCreational interface {
-	Creational[entity.Chapter, int]
-	Modificational[entity.Chapter, int]
-	Retrival[entity.Chapter, int]
-	Destroyer[int]
-	Accessable[mysql.ChapterRepositry]
-}
-
-// Contract of Service manga  as depedency
-type ServiceMangaCreational interface {
-	Creational[entity.Manga, int]
-	Modificational[entity.Manga, int]
-	Retrival[entity.Manga, int]
-	Destroyer[int]
-}
-
-// Contract MAnga Repo
-type RepoMangaCreational interface {
-	Creational[entity.Manga, int]
-	Modificational[entity.Manga, int]
-	Retrival[entity.Manga, int]
-	Destroyer[int]
-	Accessable[mysql.MangaRepository]
-}
-
-// Contract User Repo
-type RepoUserCreational interface {
-	Creational[entity.User, int]
-	Modificational[entity.User, int]
-	Retrival[entity.User, int]
-	Destroyer[int]
-	Accessable[mysql.UserRepository]
-}
-
-// Contract User Repo
-type ServiceUserCreational interface {
-	Creational[entity.User, int]
-	Modificational[entity.User, int]
-	Retrival[entity.User, int]
-	Destroyer[int]
-}
 
 type Accessable[T any] interface {
 	// Get Access to instance of of T

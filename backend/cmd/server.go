@@ -7,6 +7,7 @@ import (
 	"bacakomik/http"
 	"bacakomik/http/chapter"
 	"bacakomik/http/manga"
+	"bacakomik/http/media"
 	"bacakomik/repository"
 	"bacakomik/repository/mysql"
 	"bacakomik/service"
@@ -26,12 +27,17 @@ func RunServer() {
 	cr := mysql.NewChapterRepository(c)
 	cs := service.NewChapterService(cr)
 
+	medr := mysql.NewMediaRepository(c)
+	meds := service.NewMediaService(medr)
+
+	// BOOTSTRAP HTTP SERVER
 	h := http.NewHTTPServer()
 
 	// Register The Routes
-	mangaHttp := manga.NewMangaHttpServer(h, ms)
-	chapterHttp := chapter.NewChapterHTTP(h, cs)
-	http.RegisterHttp(mangaHttp, chapterHttp)
+	mangaHTTP := manga.NewMangaHttpServer(h, ms)
+	chapterHTTP := chapter.NewChapterHTTP(h, cs)
+	mediaHTTP := media.NewMangaHttpServer(h, meds)
+	http.RegisterHttp(mangaHTTP, chapterHTTP, mediaHTTP)
 
 	h.RunHttpServer(":3000")
 }
