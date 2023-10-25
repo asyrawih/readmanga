@@ -51,12 +51,12 @@ func (cr *ChapterController) GetChapter(c echo.Context) error {
 
 // Create Chapter
 //
-//	@Summary	    craete chapter
-//	@Description    create chapters
+//	@Summary		craete chapter
+//	@Description	create chapters
 //	@Tags			manga
 //	@Accept			json
 //	@Produce		json
-//	@Param			manga	body	model.CreateChapterRequest true	"manga requested info"
+//	@Param			manga	body	model.CreateChapterRequest	true	"manga requested info"
 //	@Body			json
 //	@Success		200	{object}	model.Response{data=entity.Chapter}
 //	@Fail			400     {object}    model.Response{data=FailMessage}
@@ -87,15 +87,15 @@ func (cr *ChapterController) Create(c echo.Context) error {
 
 // Listmanga list all existing manga
 //
-//		@Summary		List manga
-//		@Description	get all manga
-//		@Tags			manga
-//		@Accept			json
-//		@Produce		json
-//	    @Param			chapterID path		int	true	"Manga Id"
-//		@Success		200	{object}	model.Response{data=[]entity.Chapter}
-//		@Fail			400 {object}    model.Response{data=FailMessage}
-//		@Router			/chapter/{chapterID}    [get]
+//	@Summary		List manga
+//	@Description	get all manga
+//	@Tags			manga
+//	@Accept			json
+//	@Produce		json
+//	@Param			chapterID	path		int	true	"Manga Id"
+//	@Success		200			{object}	model.Response{data=[]entity.Chapter}
+//	@Fail			400 {object}    model.Response{data=FailMessage}
+//	@Router			/chapter/{chapterID}    [get]
 //
 // FindOne method
 // Get Chapter And Then Attach Media Relation

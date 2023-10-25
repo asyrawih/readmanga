@@ -34,6 +34,17 @@ definitions:
       type:
         type: string
     type: object
+  entity.Media:
+    properties:
+      id:
+        type: integer
+      model_id:
+        type: integer
+      model_type:
+        type: string
+      url:
+        type: string
+    type: object
   model.CreateChapterRequest:
     properties:
       chapter:
@@ -296,6 +307,103 @@ paths:
                   type: string
               type: object
       summary: Update Manga
+      tags:
+      - manga
+  /media:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create media
+      parameters:
+      - description: image file
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: model_id
+        in: formData
+        name: model_id
+        required: true
+        type: integer
+      - description: model_type
+        in: formData
+        name: model_type
+        required: true
+        type: string
+      - description: location
+        in: formData
+        name: manga
+        required: true
+        type: string
+      - description: location
+        in: formData
+        name: chapter
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Media'
+              type: object
+      summary: create Media
+      tags:
+      - manga
+  /media/batch:
+    post:
+      consumes:
+      - multipart/form-data
+      description: create media
+      parameters:
+      - collectionFormat: csv
+        description: image file
+        in: formData
+        items:
+          type: file
+        name: images
+        required: true
+        type: array
+      - description: model_id
+        in: formData
+        name: model_id
+        required: true
+        type: integer
+      - description: model_type
+        in: formData
+        name: model_type
+        required: true
+        type: string
+      - description: judul manga
+        in: formData
+        name: manga
+        required: true
+        type: string
+      - description: chapter manga
+        in: formData
+        name: chapter
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Media'
+                  type: array
+              type: object
+      summary: create Media
       tags:
       - manga
 swagger: "2.0"
