@@ -7,3 +7,12 @@ type Chapter struct {
 	Chapter string `json:"chapter,omitempty"`
 	Content string `json:"content,omitempty"`
 }
+
+type ChapterWithMedia struct {
+	Chapter Chapter `json:"chapter,omitempty"`
+	Medias  []Media `json:"medias,omitempty"`
+}
+
+func (ch *Chapter) String() string {
+	return "chapters"
+}

@@ -28,3 +28,8 @@ func (m *Manga) ToJSon() string {
 	}
 	return string(b)
 }
+
+// String method
+func (ma *Manga) String() string {
+	return "manga"
+}

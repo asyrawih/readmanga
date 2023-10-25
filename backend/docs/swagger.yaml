@@ -1,5 +1,16 @@
 basePath: /
 definitions:
+  entity.Chapter:
+    properties:
+      chapter:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
+      manga_id:
+        type: integer
+    type: object
   entity.Manga:
     properties:
       author:
@@ -22,6 +33,15 @@ definitions:
         type: integer
       type:
         type: string
+    type: object
+  model.CreateChapterRequest:
+    properties:
+      chapter:
+        type: string
+      content:
+        type: string
+      manga_id:
+        type: integer
     type: object
   model.CreateMangaRequest:
     properties:
@@ -74,9 +94,85 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: Hanan Test
+  title: Manga service API
   version: 1.0.0
 paths:
+  /chapter:
+    get:
+      consumes:
+      - application/json
+      description: get all manga
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Chapter'
+                  type: array
+              type: object
+      summary: List manga
+      tags:
+      - manga
+    post:
+      consumes:
+      - application/json
+      description: create chapters
+      parameters:
+      - description: manga requested info
+        in: body
+        name: manga
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateChapterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Chapter'
+              type: object
+      summary: craete chapter
+      tags:
+      - manga
+  /chapter/{chapterID}:
+    get:
+      consumes:
+      - application/json
+      description: get all manga
+      parameters:
+      - description: Manga Id
+        in: path
+        name: chapterID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Chapter'
+                  type: array
+              type: object
+      summary: List manga
+      tags:
+      - manga
   /manga:
     get:
       consumes:
