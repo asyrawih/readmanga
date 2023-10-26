@@ -22,7 +22,7 @@ import (
 	"bacakomik/tools/provider"
 )
 
-func ProcessReadChapter() {
+func ProcessReadChapter(sizeWorker int) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Err(errors.New("[ProcessReadChapter]: got panic try to restore it")).Msg("")
@@ -42,7 +42,7 @@ func ProcessReadChapter() {
 	mr := mysql.NewMangaRepository(connect)
 	cr := mysql.NewChapterRepository(connect)
 
-	workerPool := make(chan struct{}, 20)
+	workerPool := make(chan struct{}, sizeWorker)
 	defer close(workerPool)
 
 	for _, md := range detail {
