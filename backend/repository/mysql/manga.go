@@ -7,16 +7,16 @@ import (
 	"bacakomik/record/entity"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 )
 
 type MangaRepository struct {
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 }
 
 // NewMangaRepository function
-func NewMangaRepository(conn *pgx.Conn) *MangaRepository {
+func NewMangaRepository(conn *pgxpool.Pool) *MangaRepository {
 	return &MangaRepository{
 		conn: conn,
 	}

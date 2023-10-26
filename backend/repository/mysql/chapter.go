@@ -3,18 +3,19 @@ package mysql
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog/log"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"bacakomik/record/entity"
 )
 
 type ChapterRepositry struct {
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 }
 
 // NewMangaRepository function
-func NewChapterRepository(conn *pgx.Conn) *ChapterRepositry {
+func NewChapterRepository(conn *pgxpool.Pool) *ChapterRepositry {
 	return &ChapterRepositry{
 		conn: conn,
 	}
