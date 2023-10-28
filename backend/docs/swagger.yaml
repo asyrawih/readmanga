@@ -330,12 +330,12 @@ paths:
         name: model_type
         required: true
         type: string
-      - description: location
+      - description: manga
         in: formData
         name: manga
         required: true
         type: string
-      - description: location
+      - description: chapter
         in: formData
         name: chapter
         required: true
@@ -359,7 +359,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: create media
+      description: Upload batch file
       parameters:
       - collectionFormat: csv
         description: image file
@@ -403,7 +403,7 @@ paths:
                     $ref: '#/definitions/entity.Media'
                   type: array
               type: object
-      summary: create Media
+      summary: Upload Batch
       tags:
       - media
 swagger: "2.0"

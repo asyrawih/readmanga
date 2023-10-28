@@ -395,14 +395,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "location",
+                        "description": "manga",
                         "name": "manga",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "location",
+                        "description": "chapter",
                         "name": "chapter",
                         "in": "formData",
                         "required": true
@@ -432,7 +432,7 @@ const docTemplate = `{
         },
         "/media/batch": {
             "post": {
-                "description": "create media",
+                "description": "Upload batch file",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -442,7 +442,7 @@ const docTemplate = `{
                 "tags": [
                     "media"
                 ],
-                "summary": "create Media",
+                "summary": "Upload Batch",
                 "parameters": [
                     {
                         "type": "array",

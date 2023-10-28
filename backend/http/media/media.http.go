@@ -43,8 +43,8 @@ func NewMangaHttpServer(server *http.HTTPServer, service adapter.ServiceMediaCre
 //	@Param			image	   formData	file	true	"image file"
 //	@Param			model_id   formData	integer true	"model_id"
 //	@Param			model_type formData	string  true	"model_type"
-//	@Param			manga      formData	string  true	"location"
-//	@Param			chapter    formData	string  true	"location"
+//	@Param			manga      formData	string  true	"manga"
+//	@Param			chapter    formData	string  true	"chapter"
 //	@Body			json
 //	@Success		200	{object}	model.Response{data=entity.Media}
 //	@Fail			400     {object}    model.Response{data=FailMessage}
@@ -97,8 +97,8 @@ func (m *MediaHttpController) Upload(c echo.Context) error {
 
 // Create Media
 //
-//	@Summary		create Media
-//	@Description	create media
+//	@Summary	    Upload Batch
+//	@Description    Upload batch file
 //	@Tags		    media
 //	@Accept			mpfd
 //	@Produce		json
