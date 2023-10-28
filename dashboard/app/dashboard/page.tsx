@@ -1,7 +1,9 @@
+import { Sidebar } from "@/components/sidebar";
+
 export default function Dasboard() {
   return (
     <>
-      Dashboard page
+      {/*  Summary In Here  */}
     </>
   )
 } 
