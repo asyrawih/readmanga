@@ -39,5 +39,5 @@ func RunServer() {
 	mediaHTTP := media.NewMangaHttpServer(h, meds)
 	http.RegisterHttp(mangaHTTP, chapterHTTP, mediaHTTP)
 
-	h.RunHttpServer(":3000")
+	h.RunHttpServer(":8000")
 }

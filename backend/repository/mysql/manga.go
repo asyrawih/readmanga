@@ -61,8 +61,8 @@ func (m *MangaRepository) NewApi() *MangaRepository {
 // Get All Chapter by mangas_id relation
 func (m *MangaRepository) GetChapters(ctx context.Context, manga_id int) ([]entity.Chapter, error) {
 	var chapters []entity.Chapter
-	sqlString := `SELECT id,mangas_id,chapter FROM chapters where chapters.mangas_id = 10067;`
-	if err := pgxscan.Select(ctx, m.conn, &chapters, sqlString); err != nil {
+	sqlString := `SELECT id,mangas_id,chapter FROM chapters where chapters.mangas_id = $1;`
+	if err := pgxscan.Select(ctx, m.conn, &chapters, sqlString, manga_id); err != nil {
 		log.Err(err).Msg("")
 		return nil, err
 	}
