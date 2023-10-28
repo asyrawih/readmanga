@@ -38,6 +38,31 @@ func (*MediaRepository) Update(ctx context.Context, data *entity.Media, id int) 
 	panic("unimplemented")
 }
 
+// Delete implements adapter.RepoMediaCreational.
+func (*MediaRepository) Delete(ctx context.Context, id int) bool {
+	panic("unimplemented")
+}
+
+// GetAll implements adapter.RepoMediaCreational.
+func (*MediaRepository) GetAll(ctx context.Context) []*entity.Manga {
+	panic("unimplemented")
+}
+
+// GetOne implements adapter.RepoMediaCreational.
+func (*MediaRepository) GetOne(ctx context.Context, id int) *entity.Manga {
+	panic("unimplemented")
+}
+
+// NewApi implements adapter.RepoMediaCreational.
+func (*MediaRepository) NewApi() *MediaRepository {
+	panic("unimplemented")
+}
+
+// Update implements adapter.RepoMediaCreational.
+func (*MediaRepository) Update(ctx context.Context, data *entity.Media, id int) error {
+	panic("unimplemented")
+}
+
 // NewMediaRepository function
 func NewMediaRepository(conn *pgxpool.Pool) *MediaRepository {
 	return &MediaRepository{

@@ -405,9 +405,5 @@ paths:
               type: object
       summary: create Media
       tags:
-<<<<<<< HEAD
       - media
-=======
-      - manga
->>>>>>> e4273fe (feat(backend): implements upload and upload batch)
 swagger: "2.0"
