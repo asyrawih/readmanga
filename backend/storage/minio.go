@@ -49,7 +49,7 @@ func (m *MiniStorageServer) NewStore() (*Store, error) {
 		Secure: false,
 	})
 	if err != nil {
-		log.Err(err).Msg("")
+		log.Err(err).Msg("[NewStore]")
 		return nil, err
 	}
 	return &Store{client: client, BucketName: "", Objectname: ""}, nil
@@ -66,7 +66,7 @@ func (m *Store) Upload(r *http.Response) error {
 		minio.PutObjectOptions{},
 	)
 	if err != nil {
-		log.Err(err).Msg("")
+		log.Err(err).Msg("[upload]")
 		return errors.New("error while uploading the image to MinIO")
 	}
 
@@ -84,7 +84,7 @@ func (m *Store) UploadRead(r io.Reader, size int64) error {
 		minio.PutObjectOptions{},
 	)
 	if err != nil {
-		log.Err(err).Msg("")
+		log.Err(err).Msg("[UploadRead]")
 		return errors.New("error while uploading the image to MinIO")
 	}
 

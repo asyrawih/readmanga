@@ -12,7 +12,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/iain17/go-cfscrape"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 
 	"bacakomik/record/entity"
@@ -22,7 +22,7 @@ import (
 	"bacakomik/tools/provider"
 )
 
-func ProcessReadChapter() {
+func ProcessReadChapter(sizeWorker int) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Err(errors.New("[ProcessReadChapter]: got panic try to restore it")).Msg("")
@@ -42,7 +42,7 @@ func ProcessReadChapter() {
 	mr := mysql.NewMangaRepository(connect)
 	cr := mysql.NewChapterRepository(connect)
 
-	workerPool := make(chan struct{}, 20)
+	workerPool := make(chan struct{}, sizeWorker)
 	defer close(workerPool)
 
 	for _, md := range detail {
@@ -51,12 +51,12 @@ func ProcessReadChapter() {
 
 		id, err := mr.Create(context.Background(), &entity.Manga{
 			Title:        sanitizeTitle,
-			Status:       md.Status,
+			Status:       strings.TrimSpace(md.Status),
 			ReleaseDate:  md.ReleaseDate,
 			TotalChapter: 0,
 			Author:       "unknown",
-			Type:         md.Type,
-			Sinopsis:     md.Sinopsis,
+			Type:         strings.TrimSpace(md.Type),
+			Sinopsis:     strings.TrimSpace(md.Sinopsis),
 			CreatedBy:    -1,
 			CreatedAt:    time.Now(),
 		})
@@ -68,7 +68,7 @@ func ProcessReadChapter() {
 				cID, err := cr.Create(context.Background(), &entity.Chapter{
 					MangaID: id,
 					Chapter: chapter.Chapter,
-					Content: md.Title,
+					Content: strings.TrimSpace(md.Title),
 				})
 				if err != nil {
 					log.Err(err).Msg("")
@@ -82,7 +82,7 @@ func ProcessReadChapter() {
 }
 
 // GetChapterDetailImage function
-func GetChapterDetailImage(chapterURL string, conn *pgx.Conn, cID int, worker <-chan struct{}) {
+func GetChapterDetailImage(chapterURL string, conn *pgxpool.Pool, cID int, worker <-chan struct{}) {
 	defer func() {
 		<-worker
 		if r := recover(); r != nil {

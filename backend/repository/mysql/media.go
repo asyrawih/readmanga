@@ -5,12 +5,12 @@ import (
 
 	"bacakomik/record/entity"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // MediaRepository struct
 type MediaRepository struct {
-	conn *pgx.Conn
+	conn *pgxpool.Pool
 }
 
 // Delete implements adapter.RepoMediaCreational.
@@ -39,7 +39,7 @@ func (*MediaRepository) Update(ctx context.Context, data *entity.Media, id int) 
 }
 
 // NewMediaRepository function
-func NewMediaRepository(conn *pgx.Conn) *MediaRepository {
+func NewMediaRepository(conn *pgxpool.Pool) *MediaRepository {
 	return &MediaRepository{
 		conn: conn,
 	}
