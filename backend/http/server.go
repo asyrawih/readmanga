@@ -26,6 +26,7 @@ type HTTPServer struct {
 func NewHTTPServer() *HTTPServer {
 	server := echo.New()
 	server.HideBanner = true
+	server.Use(middleware.CORS())
 
 	server.GET("/swagger/*", echoSwagger.WrapHandler)
 	server.Use(middleware.GzipWithConfig(middleware.GzipConfig{

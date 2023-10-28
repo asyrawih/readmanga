@@ -96,7 +96,7 @@ definitions:
       type:
         type: string
     type: object
-host: localhost:3000
+host: localhost:8000
 info:
   contact:
     email: hanan@asyrawih.id
