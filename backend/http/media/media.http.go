@@ -77,7 +77,7 @@ func (m *MediaHttpController) Upload(c echo.Context) error {
 		return err
 	}
 
-	fileName := fmt.Sprintf("%s/%s/%s/%s", "sektekomik", manga, chapter, fh.Filename)
+	fileName := fmt.Sprintf("/%s/%s/%s/%s", "sektekomik", manga, chapter, fh.Filename)
 
 	storage.SetBucketName("manga")
 	storage.SetObjectName(fileName)
@@ -144,7 +144,7 @@ func (m *MediaHttpController) UploadBatch(c echo.Context) error {
 		}
 
 		defer imageOpen.Close()
-		fileName := fmt.Sprintf("%s/%s/%s/%s", "sektekomik", manga, chapter, f.Filename)
+		fileName := fmt.Sprintf("/%s/%s/%s/%s", "sektekomik", manga, chapter, f.Filename)
 		storage.SetBucketName("manga")
 		storage.SetObjectName(fileName)
 		storage.UploadRead(imageOpen, f.Size)
