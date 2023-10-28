@@ -48,7 +48,12 @@ func (ch *ChapterService) GetOne(ctx context.Context, id int) *entity.ChapterWit
 	cwm.Chapter = *c
 	medias := ch.repo.NewApi().GetMedias(ctx, id)
 	for _, m := range medias {
-		cwm.Medias = append(cwm.Medias, *m)
+		cwm.Medias = append(cwm.Medias, entity.Media{
+			ID:        m.ID,
+			ModelType: m.ModelType,
+			ModelID:   m.ModelID,
+			URL:       m.URL,
+		})
 	}
 	return cwm
 }

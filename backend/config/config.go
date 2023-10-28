@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 
@@ -52,6 +51,5 @@ func (c *Config) LoadConfig(path string) (*Config, error) {
 		log.Err(err).Msg("")
 		return nil, err
 	}
-	fmt.Println(config)
 	return config, nil
 }
