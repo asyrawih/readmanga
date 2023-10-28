@@ -26,7 +26,7 @@ type MediaHttpController struct {
 }
 
 // NewMangaHttpServer function
-func NewMangaHttpServer(server *http.HTTPServer, service adapter.ServiceMediaCreational) *MediaHttpController {
+func NewMediaHTTPServer(server *http.HTTPServer, service adapter.ServiceMediaCreational) *MediaHttpController {
 	return &MediaHttpController{
 		server:  server,
 		service: service,

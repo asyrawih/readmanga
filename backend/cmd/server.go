@@ -36,7 +36,7 @@ func RunServer() {
 	// Register The Routes
 	mangaHTTP := manga.NewMangaHttpServer(h, ms)
 	chapterHTTP := chapter.NewChapterHTTP(h, cs)
-	mediaHTTP := media.NewMangaHttpServer(h, meds)
+	mediaHTTP := media.NewMediaHTTPServer(h, meds)
 	http.RegisterHttp(mangaHTTP, chapterHTTP, mediaHTTP)
 
 	h.RunHttpServer(":3000")

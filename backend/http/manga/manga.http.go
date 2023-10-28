@@ -20,10 +20,14 @@ type FailMessage string
 
 type MangaHttpController struct {
 	service adapter.ServiceMangaCreational
+	media   adapter.ServiceMediaCreational
 	server  *http.HTTPServer
 }
 
-func NewMangaHttpServer(server *http.HTTPServer, service adapter.ServiceMangaCreational) *MangaHttpController {
+func NewMangaHttpServer(
+	server *http.HTTPServer,
+	service adapter.ServiceMangaCreational,
+) *MangaHttpController {
 	return &MangaHttpController{
 		server:  server,
 		service: service,
