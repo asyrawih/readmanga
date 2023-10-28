@@ -1,7 +1,10 @@
 package main
 
 import (
+	"github.com/rs/zerolog/log"
+
 	"bacakomik/cmd"
+	"bacakomik/config"
 	_ "bacakomik/docs"
 )
 
@@ -18,5 +21,10 @@ import (
 // @host		localhost:8000
 // @BasePath	/
 func main() {
-	cmd.RunServer()
+	c := config.NewConfig()
+	c, err := c.LoadConfig("config.json")
+	if err != nil {
+		log.Err(err).Msg("")
+	}
+	cmd.RunServer(c)
 }

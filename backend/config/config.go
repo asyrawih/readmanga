@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 
@@ -9,24 +10,24 @@ import (
 )
 
 type Config struct {
-	Minio
-	Database
+	Minio    `json:"minio"`
+	Database `json:"database"`
 }
 
 // Database struct
 type Database struct {
-	DBHost  string `json:"db_host,omitempty"`
-	DBPort  string `json:"db_port,omitempty"`
-	User    string `json:"user,omitempty"`
-	Passwod string `json:"passwod,omitempty"`
-	DBName  string `json:"db_name,omitempty"`
+	DBHost   string `json:"db_host"`
+	DBPort   string `json:"db_port"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	DBName   string `json:"db_name"`
 }
 
 // Minio struct
 type Minio struct {
-	Host      string `json:"host,omitempty"`
-	AccessKey string `json:"access_key,omitempty"`
-	SecretKey string `json:"secret_key,omitempty"`
+	Host      string `json:"host"`
+	AccessKey string `json:"access_key"`
+	SecretKey string `json:"secret_key"`
 }
 
 // Return New Config
@@ -37,7 +38,7 @@ func NewConfig() *Config {
 // LoadConfig method
 // read file and parse into config file
 func (c *Config) LoadConfig(path string) (*Config, error) {
-	var config *Config
+	config := new(Config)
 	configByte, err := os.ReadFile(path)
 	if err != nil {
 		log.Err(err).Msg("")
@@ -51,5 +52,6 @@ func (c *Config) LoadConfig(path string) (*Config, error) {
 		log.Err(err).Msg("")
 		return nil, err
 	}
+	fmt.Println(config)
 	return config, nil
 }

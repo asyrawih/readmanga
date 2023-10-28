@@ -29,8 +29,12 @@ export default function Manga() {
   const query = useQueryClient()
   const { data } = useQuery<Response, Error>("mangas", getMangas)
 
-  if (!data) {
-    return
+  if (data) {
+    return (
+      <>
+        No Data For Showing
+      </>
+    )
   }
 
   return (

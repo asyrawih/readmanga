@@ -6,6 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v2"
 
+	"bacakomik/config"
 	"bacakomik/tools/provider/komikcast"
 )
 
@@ -23,10 +24,21 @@ func main() {
 						Aliases:  []string{"w"},
 						Required: true,
 					},
+					&cli.StringFlag{
+						Name:     "config",
+						Usage:    "-config",
+						Aliases:  []string{"c"},
+						Required: true,
+					},
 				},
 				Action: func(ctx *cli.Context) error {
 					i := ctx.Int("size")
-					komikcast.Start(i)
+					path := ctx.String("config")
+					c, err := config.NewConfig().LoadConfig(path)
+					if err != nil {
+						return err
+					}
+					komikcast.Start(i, c)
 					return nil
 				},
 			},

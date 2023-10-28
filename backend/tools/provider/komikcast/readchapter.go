@@ -15,6 +15,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog/log"
 
+	"bacakomik/config"
 	"bacakomik/record/entity"
 	"bacakomik/repository"
 	"bacakomik/repository/mysql"
@@ -22,7 +23,7 @@ import (
 	"bacakomik/tools/provider"
 )
 
-func ProcessReadChapter(sizeWorker int) {
+func ProcessReadChapter(sizeWorker int, config *config.Config) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Err(errors.New("[ProcessReadChapter]: got panic try to restore it")).Msg("")
@@ -33,7 +34,7 @@ func ProcessReadChapter(sizeWorker int) {
 		log.Err(err).Msg("")
 	}
 
-	var DSN = "postgres://postgres:postgres@localhost:5432/readmanga"
+	DSN := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", config.User, config.Password, config.DBHost, config.DBPort, config.DBName)
 	connect, err := repository.Connect(context.Background(), DSN)
 	if err != nil {
 		log.Err(err).Msg("error init database on crawler")
@@ -75,14 +76,14 @@ func ProcessReadChapter(sizeWorker int) {
 				}
 				workerPool <- struct{}{}
 				log.Info().Msgf("worker pool 20 from %v", len(workerPool))
-				go GetChapterDetailImage(chapter.ChapterURl, connect, cID, workerPool)
+				go GetChapterDetailImage(chapter.ChapterURl, connect, cID, workerPool, config)
 			}
 		}
 	}
 }
 
 // GetChapterDetailImage function
-func GetChapterDetailImage(chapterURL string, conn *pgxpool.Pool, cID int, worker <-chan struct{}) {
+func GetChapterDetailImage(chapterURL string, conn *pgxpool.Pool, cID int, worker <-chan struct{}, config *config.Config) {
 	defer func() {
 		<-worker
 		if r := recover(); r != nil {
@@ -105,7 +106,7 @@ func GetChapterDetailImage(chapterURL string, conn *pgxpool.Pool, cID int, worke
 	doc.Find(".chapter_body").Each(func(_ int, s *goquery.Selection) {
 		s.Find(".main-reading-area img").Each(func(_ int, s *goquery.Selection) {
 			imagesURL, _ := s.Attr("src")
-			komikcastURL := GetImage(imagesURL)
+			komikcastURL := GetImage(imagesURL, config)
 			media.Create(context.Background(), &entity.Media{
 				ModelType: "chapters",
 				ModelID:   cID,
@@ -115,7 +116,7 @@ func GetChapterDetailImage(chapterURL string, conn *pgxpool.Pool, cID int, worke
 	})
 }
 
-func GetImage(imageURL string) string {
+func GetImage(imageURL string, config *config.Config) string {
 	req, err := http.NewRequest("GET", imageURL, nil)
 	if err != nil {
 		fmt.Println("Error while creating the request:", err)
@@ -146,9 +147,9 @@ func GetImage(imageURL string) string {
 	}
 
 	mss := storage.NewMinioStorageServer(
-		"localhost:9000",
-		"LR9boPTBwdBmeQzVHoCO",
-		"7OVcEt2zky9sxs0GwtDEXsJdgVRPshBjEw6IwpBW",
+		config.Host,
+		config.AccessKey,
+		config.SecretKey,
 	)
 	s, err := mss.NewStore()
 	if err != nil {

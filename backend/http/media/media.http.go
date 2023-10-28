@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"bacakomik/adapter"
+	"bacakomik/config"
 	"bacakomik/http"
 	"bacakomik/record/entity"
 	"bacakomik/record/model"
@@ -22,14 +23,20 @@ type FailMessage string
 // MediaHttpController struct
 type MediaHttpController struct {
 	service adapter.ServiceMediaCreational
+	config  *config.Config
 	server  *http.HTTPServer
 }
 
 // NewMangaHttpServer function
-func NewMediaHTTPServer(server *http.HTTPServer, service adapter.ServiceMediaCreational) *MediaHttpController {
+func NewMediaHTTPServer(
+	server *http.HTTPServer,
+	service adapter.ServiceMediaCreational,
+	config *config.Config,
+) *MediaHttpController {
 	return &MediaHttpController{
 		server:  server,
 		service: service,
+		config:  config,
 	}
 }
 
@@ -68,9 +75,9 @@ func (m *MediaHttpController) Upload(c echo.Context) error {
 	defer f.Close()
 
 	mss := storage.NewMinioStorageServer(
-		"localhost:9000",
-		"LR9boPTBwdBmeQzVHoCO",
-		"7OVcEt2zky9sxs0GwtDEXsJdgVRPshBjEw6IwpBW",
+		m.config.Host,
+		m.config.AccessKey,
+		m.config.SecretKey,
 	)
 	storage, err := mss.NewStore()
 	if err != nil {
@@ -120,9 +127,9 @@ func (m *MediaHttpController) UploadBatch(c echo.Context) error {
 	model_type := c.FormValue("model_type")
 
 	mss := storage.NewMinioStorageServer(
-		"localhost:9000",
-		"LR9boPTBwdBmeQzVHoCO",
-		"7OVcEt2zky9sxs0GwtDEXsJdgVRPshBjEw6IwpBW",
+		m.config.Host,
+		m.config.AccessKey,
+		m.config.SecretKey,
 	)
 	storage, err := mss.NewStore()
 	if err != nil {

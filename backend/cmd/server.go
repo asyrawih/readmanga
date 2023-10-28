@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"log"
 
+	"bacakomik/config"
 	"bacakomik/http"
 	"bacakomik/http/chapter"
 	"bacakomik/http/manga"
@@ -13,8 +15,8 @@ import (
 	"bacakomik/service"
 )
 
-func RunServer() {
-	var DSN = "postgres://postgres:postgres@localhost:5432/readmanga"
+func RunServer(config *config.Config) {
+	DSN := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", config.User, config.Password, config.DBHost, config.DBPort, config.DBName)
 	ctx := context.Background()
 	c, err := repository.Connect(ctx, DSN)
 	if err != nil {
@@ -36,7 +38,7 @@ func RunServer() {
 	// Register The Routes
 	mangaHTTP := manga.NewMangaHttpServer(h, ms)
 	chapterHTTP := chapter.NewChapterHTTP(h, cs)
-	mediaHTTP := media.NewMediaHTTPServer(h, meds)
+	mediaHTTP := media.NewMediaHTTPServer(h, meds, config)
 	http.RegisterHttp(mangaHTTP, chapterHTTP, mediaHTTP)
 
 	h.RunHttpServer(":8000")

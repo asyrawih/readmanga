@@ -1,5 +1,7 @@
 package komikcast
 
-func Start(size int) {
-	ProcessReadChapter(size)
+import "bacakomik/config"
+
+func Start(size int, config *config.Config) {
+	ProcessReadChapter(size, config)
 }
