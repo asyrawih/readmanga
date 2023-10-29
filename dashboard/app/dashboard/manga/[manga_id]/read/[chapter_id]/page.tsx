@@ -1,5 +1,6 @@
 'use client'
 
+import Image from "next/image"
 import { useQuery } from "react-query"
 
 
@@ -60,7 +61,12 @@ export default function ChapterDetail({ params }: ParamsProps) {
   return (
     <>
       {medias.map(item => (
-        <img key={item.id} src={`http://localhost:9000/manga/${item.url}`} />
+        <img
+          alt="test"
+          key={item.id}
+          loading="lazy"
+          src={`http://localhost:9000/manga/${item.url}`} 
+        />
       ))}
     </>
   )
