@@ -75,7 +75,7 @@ func ProcessReadChapter(sizeWorker int, config *config.Config) {
 					log.Err(err).Msg("")
 				}
 				workerPool <- struct{}{}
-				log.Info().Msgf("worker pool 20 from %v", len(workerPool))
+				log.Info().Msgf("worker pool from %v", len(workerPool))
 				go GetChapterDetailImage(chapter.ChapterURl, connect, cID, workerPool, config)
 			}
 		}
