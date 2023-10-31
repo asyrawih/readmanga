@@ -5,6 +5,8 @@ import (
 
 	"bacakomik/adapter"
 	"bacakomik/record/entity"
+
+	"github.com/rs/zerolog/log"
 )
 
 type MediaService struct {
@@ -22,12 +24,14 @@ func NewMediaService(repo adapter.RepoMediaCreational) *MediaService {
 
 // Get All Data
 func (me *MediaService) GetAll(ctx context.Context) []*entity.Media {
-	panic("not implemented") // TODO: Implement
+	m := me.repo.GetAll(ctx)
+	return m
 }
 
 // Retrive One Data
 func (me *MediaService) GetOne(ctx context.Context, id int) *entity.Media {
-	panic("not implemented") // TODO: Implement
+	m := me.repo.GetOne(ctx, id)
+	return m
 }
 
 // Create Data
@@ -43,10 +47,15 @@ func (me *MediaService) Create(ctx context.Context, data *entity.Media) (int, er
 
 // Delete the record
 func (me *MediaService) Delete(ctx context.Context, id int) bool {
-	panic("not implemented") // TODO: Implement
+	b := me.repo.Delete(ctx, id)
+	return b
 }
 
 // Update Data
 func (me *MediaService) Update(ctx context.Context, data *entity.Media, id int) error {
-	panic("not implemented") // TODO: Implement
+	if err := me.repo.Update(ctx, data, id); err != nil {
+		log.Err(err).Msg("")
+		return err
+	}
+	return nil
 }

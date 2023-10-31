@@ -71,6 +71,15 @@ definitions:
       type:
         type: string
     type: object
+  model.CreateMediaRequest:
+    properties:
+      model_id:
+        type: integer
+      model_type:
+        type: string
+      url:
+        type: string
+    type: object
   model.Response:
     properties:
       data: {}
@@ -353,6 +362,32 @@ paths:
                   $ref: '#/definitions/entity.Media'
               type: object
       summary: create Media
+      tags:
+      - media
+    put:
+      consumes:
+      - application/json
+      description: update media
+      parameters:
+      - description: media request info
+        in: body
+        name: media
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateMediaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Media'
+              type: object
+      summary: update media
       tags:
       - media
   /media/batch:
