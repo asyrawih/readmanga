@@ -44,14 +44,14 @@ func NewMediaHTTPServer(
 //
 //	@Summary		create Media
 //	@Description	create media
-//	@Tags		    media
+//	@Tags			media
 //	@Accept			mpfd
 //	@Produce		json
-//	@Param			image	   formData	file	true	"image file"
-//	@Param			model_id   formData	integer true	"model_id"
-//	@Param			model_type formData	string  true	"model_type"
-//	@Param			manga      formData	string  true	"manga"
-//	@Param			chapter    formData	string  true	"chapter"
+//	@Param			image		formData	file	true	"image file"
+//	@Param			model_id	formData	integer	true	"model_id"
+//	@Param			model_type	formData	string	true	"model_type"
+//	@Param			manga		formData	string	true	"manga"
+//	@Param			chapter		formData	string	true	"chapter"
 //	@Body			json
 //	@Success		200	{object}	model.Response{data=entity.Media}
 //	@Fail			400     {object}    model.Response{data=FailMessage}
@@ -104,16 +104,16 @@ func (m *MediaHttpController) Upload(c echo.Context) error {
 
 // Create Media
 //
-//	@Summary	    Upload Batch
-//	@Description    Upload batch file
-//	@Tags		    media
+//	@Summary		Upload Batch
+//	@Description	Upload batch file
+//	@Tags			media
 //	@Accept			mpfd
 //	@Produce		json
-//	@Param			images     formData	[]file	true	"image file"
-//	@Param			model_id   formData	integer true	"model_id"
-//	@Param			model_type formData	string  true	"model_type"
-//	@Param			manga      formData	string  true	"judul manga"
-//	@Param			chapter    formData	string  true	"chapter manga"
+//	@Param			images		formData	[]file	true	"image file"
+//	@Param			model_id	formData	integer	true	"model_id"
+//	@Param			model_type	formData	string	true	"model_type"
+//	@Param			manga		formData	string	true	"judul manga"
+//	@Param			chapter		formData	string	true	"chapter manga"
 //	@Body			json
 //	@Success		200	{object}	model.Response{data=[]entity.Media}
 //	@Fail			400     {object}    model.Response{data=FailMessage}
@@ -178,6 +178,22 @@ func (m *MediaHttpController) UploadBatch(c echo.Context) error {
 	return c.JSON(net.StatusOK, response)
 }
 
+// update media
+//
+// @Summary		    update media
+// @Description	    update media
+// @Tags		    media
+// @Accept			json
+// @Produce		    json
+// @Param			media   body	model.CreateMediaRequest true	"media request info"
+// @Body			json
+// @Success		    200	    {object}	model.Response{data=entity.Media}
+// @Fail			400     {object}    model.Response{data=FailMessage}
+// @Router			/media [put]
+func (md *MediaHttpController) Update(c echo.Context) error {
+	return c.JSON(200, "OKE")
+}
+
 func ToInterger(some string) int {
 	i, err := strconv.Atoi(some)
 	if err != nil {
@@ -195,6 +211,11 @@ func (m *MediaHttpController) Routes() {
 			Method:  net.MethodPost,
 			Path:    "/media",
 			Handler: m.Upload,
+		},
+		{
+			Method:  net.MethodPut,
+			Path:    "/media",
+			Handler: m.Update,
 		},
 		{
 			Method:  net.MethodPost,
