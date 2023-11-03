@@ -114,6 +114,23 @@ func (cr *ChapterController) FindOne(c echo.Context) error {
 	return c.JSON(net.StatusOK, r)
 }
 
+//	UpdateChapter chapters
+//
+// @Summary		List manga
+// @Description	get all manga
+// @Tags			chapters
+// @Accept			json
+// @Produce		json
+// @Param			chapterID	path		int	true	"Manga Id"
+// @Success		200			{object}	model.Response{data=[]entity.Chapter}
+// @Fail			400 {object}    model.Response{data=FailMessage}
+// @Router			/chapter/{chapterID}    [get]
+//
+// UpdateChapter method
+func (cr *ChapterController) UpdateChapter(c echo.Context) error {
+	return nil
+}
+
 // Routes method
 func (cr *ChapterController) Routes() {
 	r := http.NewRoutes()
@@ -132,6 +149,11 @@ func (cr *ChapterController) Routes() {
 			Method:  net.MethodGet,
 			Path:    "/chapter/:chapterID",
 			Handler: cr.FindOne,
+		},
+		{
+			Method:  net.MethodPut,
+			Path:    "/chapter/:chapterID",
+			Handler: cr.UpdateChapter,
 		},
 	}
 	r.Routes = append(r.Routes, routes...)
