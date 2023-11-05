@@ -16,6 +16,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Run Server
 func RunServer(config *config.Config, ports string) {
 	DSN := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", config.User, config.Password, config.DBHost, config.DBPort, config.DBName)
 	ctx := context.Background()

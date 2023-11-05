@@ -9,7 +9,7 @@ provider "kubernetes" {
 
 module "nginx_workloads" {
   service_type = "NodePort"
-  replica_set = 2
-  nginx_port = 80
-  source = "./modules/k8s"
+  replica_set  = 2
+  nginx_port   = 80
+  source       = "./modules/k8s"
 }
