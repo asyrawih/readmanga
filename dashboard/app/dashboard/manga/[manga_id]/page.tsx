@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { BACKEND_URL } from "@/lib/utils";
 import { Separator } from "@radix-ui/react-separator";
 import Link from "next/link";
 import { useQuery } from "react-query";
@@ -31,7 +32,7 @@ type Manga = {
 
 export default function DetailPage({ params }: { params: { manga_id: string } }) {
   const getMangaDetail = async () => {
-    const result = await fetch(`http://localhost:8000/manga/${params.manga_id}`)
+    const result = await fetch(`${BACKEND_URL}/manga/${params.manga_id}`)
     return result.json()
   }
   const { data } = useQuery<Response, Error>("manga_detail", getMangaDetail)
