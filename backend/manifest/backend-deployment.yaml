@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: readmanga:v0.0.1
+          command: ["start", "-p", "8000", "-c", "config.json"]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: backend-config
+              mountPath: /app/config.json
+  volumes:
+    - name: backend-config
+      hostPath:
+        path: ./config.json
