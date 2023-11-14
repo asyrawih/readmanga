@@ -25,7 +25,7 @@ const formSchema = z.object({
   sinopsis: z.string({ required_error: "sinopsis required" }).min(10),
   status: z.string({ required_error: "status required" }).min(4),
   title: z.string({ required_error: "title required" }).min(5),
-  total_chapter: z.string({ required_error: "total_chapter required" }),
+  total_chapter: z.string({ required_error: "total_chapter required" }).regex(new RegExp('^[0-9]+$'), "must be valid number"),
   type: z.string({ required_error: "type of manga required" }).min(4)
 })
 
