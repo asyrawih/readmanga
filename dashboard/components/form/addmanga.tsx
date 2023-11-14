@@ -7,6 +7,7 @@ import { Input } from "../ui/input"
 import { Separator } from "../ui/separator"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
+import {zodResolver} from "@hookform/resolvers/zod"
 
 
 // {
@@ -20,13 +21,15 @@ import { Button } from "../ui/button"
 // }
 const formSchema = z.object({
   author: z.string({ required_error: "author name required" }).min(3).max(200),
-  release_date: z.string({ required_error: "Release Date required" }),
-  sinopsis: z.string({ required_error: "sinopsis required" }),
-  status: z.string({ required_error: "status required" }),
-  title: z.string({ required_error: "title required" }),
-  total_chapter: z.number({ required_error: "total_chapter required" }),
-  type: z.string({ required_error: "type of manga required" })
+  release_date: z.string({ required_error: "Release Date required" }).min(4),
+  sinopsis: z.string({ required_error: "sinopsis required" }).min(10),
+  status: z.string({ required_error: "status required" }).min(4),
+  title: z.string({ required_error: "title required" }).min(5),
+  total_chapter: z.string({ required_error: "total_chapter required" }),
+  type: z.string({ required_error: "type of manga required" }).min(4)
 })
+
+formSchema.required()
 
 type FormUI = {
   name: keyof z.infer<typeof formSchema>
@@ -58,7 +61,7 @@ const buildForm: Array<FormUI> = [
   {
     name: "total_chapter",
     label: "Total Chapter",
-    type: "text"
+    type: "string"
   },
   {
     name: "status",
@@ -74,6 +77,7 @@ const buildForm: Array<FormUI> = [
 
 export const AddFormManga = () => {
   const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       ...(buildForm.reduce((acc, item) => {
         acc[item.name] = "";
@@ -98,8 +102,9 @@ export const AddFormManga = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {item.type == "textarea" ? (<Textarea {...field} />) : (<Input className="my-3" placeholder={item.label} autoComplete="off" {...field} />)}
+                    {item.type == "textarea" ? (<Textarea {...field} />) : (<Input className="my-3" type={item.type} placeholder={item.label} autoComplete="off" {...field} />)}
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
