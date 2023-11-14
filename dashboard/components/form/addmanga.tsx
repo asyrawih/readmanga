@@ -7,7 +7,7 @@ import { Input } from "../ui/input"
 import { Separator } from "../ui/separator"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
-import {zodResolver} from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 
 // {
@@ -83,7 +83,7 @@ export const AddFormManga = () => {
         acc[item.name] = "";
         return acc;
       }, {} as { [key: string]: string })),
-    }
+    },
   })
 
   const handleSubmit = (val: z.infer<typeof formSchema>) => {
@@ -110,7 +110,7 @@ export const AddFormManga = () => {
             />
           )
           )}
-          <Button type="submit">Save</Button>
+          <Button className="mt-3" type="submit">Save</Button>
         </form>
       </Form>
     </>
