@@ -24,7 +24,7 @@ type Manga = {
 
 export default function Manga() {
   const getMangas = async () => {
-    const result = await fetch("http://localhost:8000/manga")
+    const result = await fetch(`${BACKEND_URL}/manga`)
     return result.json()
   }
   const query = useQueryClient()
