@@ -42,7 +42,9 @@ export default function Manga() {
     <Card className="mt-12">
       <CardHeader className="flex justify-between flex-row">
         <CardTitle>Manga List</CardTitle>
-        <Button variant={'secondary'}>Add Manga</Button>
+        <Button variant={'secondary'}>
+          <Link href={'/dashboard/manga/add'}> Add manga </Link>
+        </Button>
       </CardHeader>
       <CardContent>
         <Table>
