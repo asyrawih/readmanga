@@ -3,6 +3,7 @@
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { BACKEND_URL } from "@/lib/utils"
 import { CardStackPlusIcon, TableIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
 import { useQuery, useQueryClient } from "react-query"
@@ -39,8 +40,9 @@ export default function Manga() {
 
   return (
     <Card className="mt-12">
-      <CardHeader className="flex">
+      <CardHeader className="flex justify-between flex-row">
         <CardTitle>Manga List</CardTitle>
+        <Button variant={'secondary'}>Add Manga</Button>
       </CardHeader>
       <CardContent>
         <Table>
@@ -65,7 +67,6 @@ export default function Manga() {
                   <Link href={`/dashboard/manga/${item.id}`} className={buttonVariants({ variant: 'ghost' })}>
                     View
                   </Link>
-                  <Button variant={'ghost'}>DELETE</Button>
                 </TableCell>
               </TableRow>
             ))}

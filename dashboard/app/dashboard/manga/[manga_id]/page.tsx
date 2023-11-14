@@ -1,4 +1,5 @@
 'use client'
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -62,6 +63,7 @@ export default function DetailPage({ params }: { params: { manga_id: string } })
             <span className="my-2 text-muted font-bold tracking-wide text-xl">Author</span>
             {data.data.Manga.author}
           </CardTitle>
+          <Button variant={'secondary'}>Add Chapter</Button>
         </CardHeader>
         <CardContent>
           <CardTitle>Chapter List</CardTitle>
