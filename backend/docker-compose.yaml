@@ -28,7 +28,7 @@ services:
       - MINIO_DEFAULT_BUCKETS=manga
 
   backend:
-    image: readmanga:v0.0.1
+    image: readmanga:v0.0.2
     container_name: readmanga
     ports:
       - 8000:8000
