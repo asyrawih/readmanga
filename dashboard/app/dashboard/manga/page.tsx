@@ -3,10 +3,11 @@
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { toast } from "@/components/ui/use-toast"
 import { BACKEND_URL } from "@/lib/utils"
 import { CardStackPlusIcon, TableIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
-import { useQuery, useQueryClient } from "react-query"
+import { useMutation, useQuery, useQueryClient } from "react-query"
 
 type Response = {
   error_code: string
@@ -22,6 +23,16 @@ type Manga = {
   type: string
 }
 
+const deleteManga = async (id: number) => {
+  const result = await fetch(`${BACKEND_URL}/manga/${id}`, {
+    method: "DELETE",
+    headers: {
+      'Content-Type': "application/json"
+    }
+  })
+  return result.json()
+}
+
 export default function Manga() {
   const getMangas = async () => {
     const result = await fetch(`${BACKEND_URL}/manga`)
@@ -29,6 +40,13 @@ export default function Manga() {
   }
   const query = useQueryClient()
   const { data } = useQuery<Response, Error>("mangas", getMangas)
+
+  const mutate = useMutation(deleteManga)
+
+  const sendDeleteRequest = (id: number) => {
+    mutate.mutate(id)
+    query.resetQueries()
+  }
 
   if (!data) {
     return (
@@ -59,7 +77,7 @@ export default function Manga() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.data.map(item => (
+            {data.data?.map(item => (
               <TableRow key={item.id}>
                 <TableCell>{item.id} </TableCell>
                 <TableCell>{item.title} </TableCell>
@@ -69,6 +87,9 @@ export default function Manga() {
                   <Link href={`/dashboard/manga/${item.id}`} className={buttonVariants({ variant: 'ghost' })}>
                     View
                   </Link>
+                  <Button variant={'destructive'} onClick={() => sendDeleteRequest(item.id)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
