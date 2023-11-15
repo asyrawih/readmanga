@@ -42,7 +42,7 @@ export default function DetailPage({ params }: { params: { manga_id: string } })
     return
   }
 
-  const chapters = data.data.Chapters.sort((a, b) => Number(a) - Number(b))
+  const chapters = data.data.Chapters?.sort((a, b) => Number(a) - Number(b))
 
   return (
     <div>
@@ -70,7 +70,7 @@ export default function DetailPage({ params }: { params: { manga_id: string } })
           <CardTitle>Chapter List</CardTitle>
           <Separator orientation="horizontal" className="my-3 border" />
           <ScrollArea className="h-[450px]">
-            {chapters.map(item => (
+            {chapters?.map(item => (
               <div key={item.id}>
                 <div className="border px-2 py-3 cursor-pointer">
                   <Link href={`/dashboard/manga/${item.manga_id}/read/${item.id}`}>

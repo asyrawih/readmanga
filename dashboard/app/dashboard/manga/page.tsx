@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/components/ui/use-toast"
 import { BACKEND_URL } from "@/lib/utils"
-import { CardStackPlusIcon, TableIcon } from "@radix-ui/react-icons"
+import { CardStackPlusIcon, EyeOpenIcon, TableIcon, TrashIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 
@@ -41,11 +41,14 @@ export default function Manga() {
   const query = useQueryClient()
   const { data } = useQuery<Response, Error>("mangas", getMangas)
 
-  const mutate = useMutation(deleteManga)
+  const mutate = useMutation(deleteManga, {
+    onSuccess: () => {
+      query.invalidateQueries({ queryKey: ["mangas"] })
+    }
+  })
 
   const sendDeleteRequest = (id: number) => {
     mutate.mutate(id)
-    query.resetQueries()
   }
 
   if (!data) {
@@ -57,7 +60,7 @@ export default function Manga() {
   }
 
   return (
-    <Card className="mt-12">
+    <Card className="mt-2">
       <CardHeader className="flex justify-between flex-row">
         <CardTitle>Manga List</CardTitle>
         <Button variant={'secondary'}>
@@ -83,12 +86,12 @@ export default function Manga() {
                 <TableCell>{item.title} </TableCell>
                 <TableCell>{item.status} </TableCell>
                 <TableCell>{item.type} </TableCell>
-                <TableCell className="text-right">
-                  <Link href={`/dashboard/manga/${item.id}`} className={buttonVariants({ variant: 'ghost' })}>
-                    View
+                <TableCell className="text-right space-x-1">
+                  <Link href={`/dashboard/manga/${item.id}`} className={buttonVariants({ variant: 'outline' })}>
+                    <EyeOpenIcon className="mx-1" />
                   </Link>
                   <Button variant={'destructive'} onClick={() => sendDeleteRequest(item.id)}>
-                    Delete
+                    <TrashIcon className="mx-1" />
                   </Button>
                 </TableCell>
               </TableRow>
