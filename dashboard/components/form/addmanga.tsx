@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "react-query"
 import { BACKEND_URL } from "@/lib/utils"
 import { json } from "stream/consumers"
 import { toast } from "../ui/use-toast"
+import { DropZone } from "../dropImage/image"
 
 
 // {
@@ -105,7 +106,10 @@ export const AddFormManga = () => {
 
   const mutation = useMutation(addMangaRequest, {
     onSuccess: (data) => {
-      toast({ title: "added", variant: 'default', description: `success add manga ${data.data.title}`  })
+      toast({ title: "added", variant: 'default', description: `success add manga ${data.data.title}` })
+    },
+    onError: (error) => {
+      toast({ title: "added", variant: 'default', description: `${error}`})
     }
   })
 
@@ -134,6 +138,7 @@ export const AddFormManga = () => {
             />
           )
           )}
+          <DropZone />
           <Button className="mt-3" type="submit">Save</Button>
         </form>
       </Form>
