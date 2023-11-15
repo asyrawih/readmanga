@@ -8,6 +8,10 @@ import { Separator } from "../ui/separator"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "react-query"
+import { BACKEND_URL } from "@/lib/utils"
+import { json } from "stream/consumers"
+import { toast } from "../ui/use-toast"
 
 
 // {
@@ -25,7 +29,7 @@ const formSchema = z.object({
   sinopsis: z.string({ required_error: "sinopsis required" }).min(10),
   status: z.string({ required_error: "status required" }).min(4),
   title: z.string({ required_error: "title required" }).min(5),
-  total_chapter: z.string({ required_error: "total_chapter required" }).regex(new RegExp('^[0-9]+$'), "must be valid number"),
+  total_chapter: z.coerce.number().positive(),
   type: z.string({ required_error: "type of manga required" }).min(4)
 })
 
@@ -61,7 +65,7 @@ const buildForm: Array<FormUI> = [
   {
     name: "total_chapter",
     label: "Total Chapter",
-    type: "string"
+    type: "number"
   },
   {
     name: "status",
@@ -86,8 +90,25 @@ export const AddFormManga = () => {
     },
   })
 
+  const addMangaRequest = async (val: z.infer<typeof formSchema>) => {
+    val.total_chapter = 10
+    const newVal = { ...val, }
+    const result = await fetch(`${BACKEND_URL}/manga`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(val)
+    })
+    return result.json()
+  }
+
+  const mutation = useMutation(addMangaRequest)
+
   const handleSubmit = (val: z.infer<typeof formSchema>) => {
-    console.log(val)
+    mutation.mutate(val)
+    form.reset()
+    toast({ title: `success add ${val.title}` })
   }
 
   return (
@@ -102,7 +123,7 @@ export const AddFormManga = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {item.type == "textarea" ? (<Textarea {...field} />) : (<Input className="my-3" type={item.type} placeholder={item.label} autoComplete="off" {...field} />)}
+                    {item.type == "textarea" ? (<Textarea {...field} />) : (<Input className="my-3" placeholder={item.label} autoComplete="off" {...field} />)}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
