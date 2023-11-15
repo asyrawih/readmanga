@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from "react-query"
 import { BACKEND_URL } from "@/lib/utils"
 import { json } from "stream/consumers"
 import { toast } from "../ui/use-toast"
-import { DropZone } from "../dropImage/image"
+import { DropZoneComponent } from "../dropImage/image"
 
 
 // {
@@ -109,7 +109,7 @@ export const AddFormManga = () => {
       toast({ title: "added", variant: 'default', description: `success add manga ${data.data.title}` })
     },
     onError: (error) => {
-      toast({ title: "added", variant: 'default', description: `${error}`})
+      toast({ title: "added", variant: 'default', description: `${error}` })
     }
   })
 
@@ -130,7 +130,9 @@ export const AddFormManga = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {item.type == "textarea" ? (<Textarea {...field} />) : (<Input className="my-3" placeholder={item.label} autoComplete="off" {...field} />)}
+                    {item.type == "textarea" ?
+                      (<Textarea placeholder={item.label} {...field} />) :
+                      (<Input className="my-3" placeholder={item.label} autoComplete="off" {...field} />)}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -138,7 +140,7 @@ export const AddFormManga = () => {
             />
           )
           )}
-          <DropZone />
+          <DropZoneComponent />
           <Button className="mt-3" type="submit">Save</Button>
         </form>
       </Form>
