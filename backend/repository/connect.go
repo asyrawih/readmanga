@@ -21,5 +21,9 @@ func Connect(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 		return nil, err
 	}
 
+	if err = p.Ping(ctx); err != nil {
+		return nil, err
+	}
+
 	return p, err
 }

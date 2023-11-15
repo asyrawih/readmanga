@@ -22,7 +22,8 @@ func RunServer(config *config.Config, ports string) {
 	ctx := context.Background()
 	c, err := repository.Connect(ctx, DSN)
 	if err != nil {
-		log.Err(err).Msg("")
+		log.Fatal().Err(err).Msg("")
+		return
 	}
 
 	mr := mysql.NewMangaRepository(c)
