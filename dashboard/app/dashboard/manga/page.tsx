@@ -3,6 +3,7 @@
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { ToastAction } from "@/components/ui/toast"
 import { toast } from "@/components/ui/use-toast"
 import { BACKEND_URL } from "@/lib/utils"
 import { CardStackPlusIcon, EyeOpenIcon, TableIcon, TrashIcon } from "@radix-ui/react-icons"
@@ -47,14 +48,27 @@ export default function Manga() {
     }
   })
 
-  const sendDeleteRequest = (id: number) => {
-    mutate.mutate(id)
+  const sendDeleteRequest = (manga: Manga) => {
+    // mutate.mutate(manga.id)
+    toast({
+      title: `Want Delete ${manga.title} ?`,
+      variant: "destructive",
+      action: <ToastAction className="outline" onClick={() => mutate.mutate(manga.id)} altText="delete">Delete ?</ToastAction>,
+    })
   }
 
   if (!data) {
     return (
       <>
-        No Data For Showing
+        Loading ...
+      </>
+    )
+  }
+
+  if (query.isFetching({ queryKey: ["mangas"] })) {
+    return (
+      <>
+        Fetching ....
       </>
     )
   }
@@ -90,7 +104,7 @@ export default function Manga() {
                   <Link href={`/dashboard/manga/${item.id}`} className={buttonVariants({ variant: 'outline' })}>
                     <EyeOpenIcon className="mx-1" />
                   </Link>
-                  <Button variant={'destructive'} onClick={() => sendDeleteRequest(item.id)}>
+                  <Button disabled={mutate.status == 'loading'} variant={'destructive'} onClick={() => sendDeleteRequest(item)}>
                     <TrashIcon className="mx-1" />
                   </Button>
                 </TableCell>
