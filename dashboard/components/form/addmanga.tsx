@@ -103,12 +103,15 @@ export const AddFormManga = () => {
     return result.json()
   }
 
-  const mutation = useMutation(addMangaRequest)
+  const mutation = useMutation(addMangaRequest, {
+    onSuccess: (data) => {
+      toast({ title: "added", variant: 'default', description: `success add manga ${data.data.title}`  })
+    }
+  })
 
   const handleSubmit = (val: z.infer<typeof formSchema>) => {
     mutation.mutate(val)
     form.reset()
-    toast({ title: `success add ${val.title}` })
   }
 
   return (
