@@ -2,7 +2,6 @@
 
 import { useMutation } from "react-query"
 import { useDropzone } from "react-dropzone"
-import { CSSProperties, useEffect, useState } from "react";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -53,11 +52,15 @@ export const DropZoneComponent = ({ ...props }) => {
       'image/png': [],
       'image/webp': []
     },
-    maxFiles: 2,
+    maxFiles: 1,
     onDrop: acceptedFiles => {
-      setFiles(acceptedFiles.map(file => Object.assign(file, {
+      setFiles(acceptedFiles.map((file, index) => Object.assign(file, {
+        id: index,
         preview: URL.createObjectURL(file)
       })))
+    },
+    onDropAccepted: (data: ImageFile[] | File[]) => {
+      uploadBatch(data as ImageFile[])
     }
   });
 
