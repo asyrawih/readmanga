@@ -47,12 +47,17 @@ export const DropZoneComponent = () => {
       <div className="flex">
         {thumbs}
       </div>
-      <section className="container my-2 outline-dashed  outline-cyan-800 p-12 flex justify-center  ">
-        <div {...getRootProps({ className: 'dropzone' })}>
-          <input {...getInputProps()} />
-          <p>Drag ur thumbnail in here </p>
-        </div>
-      </section>
+
+      {files.length == 0 && (
+        <section className="container my-2 outline-dashed  outline-cyan-800 p-12 flex justify-center  ">
+          <div {...getRootProps({ className: 'dropzone' })}>
+            <>
+              <Input {...getInputProps()} />
+              <p>Drag ur thumbnail in here </p>
+            </>
+          </div>
+        </section>
+      )}
     </>
   );
 }
