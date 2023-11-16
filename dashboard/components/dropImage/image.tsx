@@ -25,8 +25,8 @@ export const DropZoneComponent = () => {
     }
   });
 
-  const thumbs = files.map(file => (
-    <div key={file.name} className="mt-3 mb-3 flex space-x-1">
+  const thumbs = files.map((file, index) => (
+    <div key={file.name} className="mt-3 mb-3 flex space-x-1 relative">
       <div className="w-[400px] m-2">
         <img
           src={file.preview}
@@ -34,6 +34,9 @@ export const DropZoneComponent = () => {
           onLoad={() => { URL.revokeObjectURL(file.preview) }}
         />
       </div>
+      <Button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" variant={'default'} onClick={() => handleRemove(file, index)}>
+        <TrashIcon />
+      </Button>
     </div>
   ));
 
