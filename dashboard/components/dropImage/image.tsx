@@ -11,6 +11,15 @@ type ImageFile = File & {
 
 export const DropZoneComponent = () => {
   const [files, setFiles] = useState<Array<ImageFile>>([]);
+
+  const [selected, setSelected] = useState<string | null>()
+
+  const handleRemove = (image: ImageFile, index: number) => {
+    const newData = [...files]
+    newData.splice(index, 1)
+    setFiles(newData)
+  }
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'image/jpeg': [],
