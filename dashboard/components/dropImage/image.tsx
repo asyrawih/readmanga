@@ -3,13 +3,40 @@
 import { useMutation } from "react-query"
 import { useDropzone } from "react-dropzone"
 import { CSSProperties, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { BACKEND_URL } from "@/lib/utils";
 
 
-type ImageFile = File & {
+interface ImageFile extends File {
+  id: number,
   preview: string
 }
 
-export const DropZoneComponent = () => {
+const uploadBatch = async (images: ImageFile[]) => {
+  const formData = new FormData()
+
+  for (let i = 0; i < images.length; i++) {
+    formData.append('images', images[i]);
+  }
+
+  formData.append("model_id", "12")
+  formData.append("model_type", "manga")
+  formData.append("manga", "test")
+  formData.append("chapter", "12")
+
+  const result = await fetch(`${BACKEND_URL}/media/batch`, {
+    method: "POST",
+    body: formData,
+  })
+
+  console.log(await result.json())
+
+}
+
+export const DropZoneComponent = ({ ...props }) => {
   const [files, setFiles] = useState<Array<ImageFile>>([]);
 
   const [selected, setSelected] = useState<string | null>()
